@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/ca328e0b4a9c4d3683ef87735c6d5e49/artifacts
+deleted_time: 1782314457926
+end_time: 1780829966500
+entry_point_name: ''
+experiment_id: '513401499173737316'
+lifecycle_stage: deleted
+run_id: ca328e0b4a9c4d3683ef87735c6d5e49
+run_name: RF_n50_d4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780829954956
+status: 3
+tags: []
+user_id: Hp

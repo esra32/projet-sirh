@@ -1,0 +1,240 @@
+/* ─── SIRH Advanced Design System ─────────────────────────────────── */
+:root {
+  /* Core Colors - Bright Modern */
+  --bg:            #F8FAFF;
+  --bg-alt:        #EEF4FF;
+  --surface:       rgba(255, 255, 255, 0.92);
+  --surface-glass: rgba(59, 130, 246, 0.06);
+  --border:        rgba(148, 163, 184, 0.32);
+  --border-glow:   rgba(59, 130, 246, 0.26);
+
+  /* Typography */
+  --text:          #0F172A;
+  --text-dim:      #334155;
+  --text-muted:    #64748B;
+
+  /* Brand Accents - Neon & Deep Blue */
+  --primary:        #3B82F6;
+  --primary-glow:   rgba(59, 130, 246, 0.55);
+  --accent:         #8B5CF6;
+  --accent-glow:    rgba(139, 92, 246, 0.45);
+
+  /* Status Tokens */
+  --success:      #10B981;
+  --warning:      #F59E0B;
+  --danger:       #EF4444;
+  --info:         #3B82F6;
+
+  /* Glassmorphism & Depth */
+  --glass-blur:   blur(12px);
+  --shadow-xl:    0 20px 50px rgba(0, 0, 0, 0.3);
+  --inner-glow:   inset 0 1px 1px rgba(255, 255, 255, 0.05);
+
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.15), transparent 35%),
+    radial-gradient(circle at 85% 5%, rgba(168, 85, 247, 0.14), transparent 40%),
+    radial-gradient(circle at 60% 90%, rgba(14, 165, 233, 0.1), transparent 35%),
+    var(--bg);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* ─── Ultra-Modern Utilities ─────────────────────────────────────── */
+.glass-panel {
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-xl);
+  box-shadow: var(--inner-glow), var(--shadow-xl);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-4px);
+}
+
+.neon-text {
+  text-shadow: 0 0 12px var(--primary-glow);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-premium {
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(56, 189, 248, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-premium:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 12px 24px rgba(56, 189, 248, 0.3);
+  transform: scale(1.02);
+}
+
+/* ─── Recruitment Custom Styles ─────────────────────────────────── */
+.status-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.status-PENDING   { background: rgba(148, 163, 184, 0.1); color: #cbd5e1; border-color: rgba(148, 163, 184, 0.2); }
+.status-ACCEPTED  { background: rgba(16, 185, 129, 0.1); color: #34d399; border-color: rgba(16, 185, 129, 0.2); }
+.status-REJECTED  { background: rgba(239, 68, 68, 0.1);  color: #f87171; border-color: rgba(239, 68, 68, 0.2); }
+
+/* ─── Skeleton Loading ────────────────────────────────────────── */
+.skeleton {
+  background: var(--surface-glass);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  min-height: 1.5em; /* Adjusted height for visibility */
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skeleton-text { height: 12px; margin-bottom: 8px; width: 80%; }
+.skeleton-title { height: 24px; margin-bottom: 12px; width: 60%; }
+.skeleton-avatar { width: 48px; height: 48px; border-radius: 50%; }
+.skeleton-btn { height: 40px; width: 120px; border-radius: 12px; }
+
+/* ─── File Upload Info ────────────────────────────────────────── */
+.file-info {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: #22C55E;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.file-info::before {
+  content: '✓';
+  display: inline-block;
+  font-weight: 700;
+}
+
+/* ─── Global Animations ────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ─── Tooltip ─────────────────────────────────────────────────── */
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1E293B;
+  color: #F1F5F9;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* ─── Responsive Typography ──────────────────────────────────── */
+@media (max-width: 768px) {
+  :root { font-size: 14px; }
+  .glass-panel { border-radius: 16px; padding: 1rem; }
+}
+
+/* ─── Smooth Page Transitions ────────────────────────────────── */
+router-outlet + * {
+  animation: fadeInUp 0.35s ease-out;
+}
+
+/* ─── Universal Printing Utilities ────────────────────────────── */
+@media print {
+  .no-print, 
+  .no-print *,
+  header, 
+  aside, 
+  nav, 
+  footer,
+  .topbar,
+  .sidebar,
+  button {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+

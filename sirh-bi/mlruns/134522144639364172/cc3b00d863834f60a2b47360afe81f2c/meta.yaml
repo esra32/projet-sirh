@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/134522144639364172/cc3b00d863834f60a2b47360afe81f2c/artifacts
+deleted_time: 1782314457706
+end_time: 1779916973761
+entry_point_name: ''
+experiment_id: '134522144639364172'
+lifecycle_stage: deleted
+run_id: cc3b00d863834f60a2b47360afe81f2c
+run_name: KMeans_k4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1779916973643
+status: 3
+tags: []
+user_id: Hp

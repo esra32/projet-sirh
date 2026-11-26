@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Keycloak Silent Check SSO</title>
+  </head>
+  <body>
+    <script>
+      // Keycloak silent check SSO HTML page.
+      // This is required when using `onLoad: 'check-sso'` in keycloak-js.
+      //
+      // After redirect, keycloak-js expects that the page can notify the parent
+      // window that the authentication status is known.
+      window.addEventListener('load', function () {
+        // no-op: keycloak-js handles messaging.
+      });
+    </script>
+  </body>
+</html>
+

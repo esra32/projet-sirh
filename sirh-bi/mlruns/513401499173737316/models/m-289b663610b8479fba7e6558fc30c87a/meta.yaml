@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/models/m-289b663610b8479fba7e6558fc30c87a/artifacts
+creation_timestamp: 1782314320750
+experiment_id: '513401499173737316'
+last_updated_timestamp: 1782314327353
+model_id: m-289b663610b8479fba7e6558fc30c87a
+model_type: null
+name: model_rf_v4_p70
+source_run_id: f155f237c9ea4388b641efbef87f26e3
+status: 2
+status_message: null

@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/models/m-ff2b6fddc82c4b2388dcb2c5c2f671a6/artifacts
+creation_timestamp: 1782314349493
+experiment_id: '513401499173737316'
+last_updated_timestamp: 1782314356820
+model_id: m-ff2b6fddc82c4b2388dcb2c5c2f671a6
+model_type: null
+name: model_lightgbm_v4
+source_run_id: 53e7827150a54a23bb34bd2c33750dd9
+status: 2
+status_message: null

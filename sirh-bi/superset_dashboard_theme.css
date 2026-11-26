@@ -1,0 +1,799 @@
+/* ============================================================
+   SIRH BI — SUPERSET V13 COMFORT PRO THEME
+   Objectif:
+   - Corriger le problème des titres coupés
+   - Garder les titres cliquables et stables
+   - Réduire le blanc avec un thème bleu/gris doux
+   - Améliorer le background des filtres
+   - Style final recommandé pour soutenance PFE / jury
+   ============================================================ */
+
+/* ============================================================
+   1) VARIABLES
+   ============================================================ */
+:root {
+  --sirh-bg-main: #e7eef7;
+  --sirh-bg-soft: #dfe8f3;
+  --sirh-bg-light: #f3f7fb;
+
+  --sirh-card: #f8fbff;
+  --sirh-card-2: #ffffff;
+  --sirh-card-border: rgba(15, 23, 42, 0.09);
+
+  --sirh-filter-bg: #edf4fb;
+  --sirh-filter-bg-2: #f7fbff;
+
+  --sirh-title: #111827;
+  --sirh-text: #243044;
+  --sirh-muted: #64748b;
+
+  --sirh-blue: #2563eb;
+  --sirh-cyan: #06b6d4;
+  --sirh-pink: #db2777;
+  --sirh-violet: #7c3aed;
+
+  --sirh-shadow-card: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --sirh-shadow-card-hover: 0 18px 45px rgba(15, 23, 42, 0.12);
+  --sirh-shadow-filter: 10px 0 28px rgba(15, 23, 42, 0.06);
+
+  --sirh-radius: 18px;
+  --sirh-radius-lg: 24px;
+
+  --sirh-font: "Segoe UI", Arial, sans-serif;
+  --sirh-title-font: "Segoe UI", Arial, sans-serif;
+}
+
+/* ============================================================
+   2) GLOBAL BACKGROUND — MOINS BLANC
+   ============================================================ */
+html,
+body,
+#app,
+.app,
+.dashboard {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.11), transparent 30%),
+    radial-gradient(circle at 100% 0%, rgba(6, 182, 212, 0.12), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(124, 58, 237, 0.06), transparent 35%),
+    linear-gradient(180deg, var(--sirh-bg-light) 0%, var(--sirh-bg-main) 45%, var(--sirh-bg-soft) 100%) !important;
+  color: var(--sirh-text) !important;
+  font-family: var(--sirh-font) !important;
+}
+
+.dashboard,
+.dragdroppable-main {
+  padding: 24px 34px !important;
+}
+
+/* ============================================================
+   3) NAVBAR
+   ============================================================ */
+.navbar,
+.navbar-default,
+nav.navbar {
+  background: rgba(248, 251, 255, 0.96) !important;
+  backdrop-filter: blur(14px) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.07) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+}
+
+.navbar a,
+.navbar .nav-link,
+.navbar .navbar-nav > li > a {
+  color: #253247 !important;
+  font-weight: 600 !important;
+}
+
+.navbar a:hover,
+.navbar .nav-link:hover {
+  color: var(--sirh-blue) !important;
+}
+
+/* ============================================================
+   4) DASHBOARD HEADER / TITLE
+   ============================================================ */
+.dashboard-header,
+.header-with-actions,
+.dashboard-header-container {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.94), rgba(240,246,252,0.94)) !important;
+  backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(15, 23, 42, 0.07) !important;
+  border-radius: 0 0 24px 24px !important;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06) !important;
+  padding: 18px 30px !important;
+}
+
+.dashboard-header .title-panel,
+.header-with-actions .title-panel {
+  position: relative !important;
+  padding-left: 18px !important;
+}
+
+.dashboard-header .title-panel::before,
+.header-with-actions .title-panel::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 6px !important;
+  bottom: 6px !important;
+  width: 5px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, var(--sirh-blue), var(--sirh-cyan), var(--sirh-pink)) !important;
+}
+
+.dashboard-header .title-panel h1,
+.published-dashboard-title,
+.dashboard-title,
+.editable-title,
+h1[data-test="dashboard-title"],
+[class*="dashboard-title"] {
+  color: var(--sirh-title) !important;
+  -webkit-text-fill-color: var(--sirh-title) !important;
+  background: none !important;
+  font-family: var(--sirh-title-font) !important;
+  font-size: 25px !important;
+  line-height: 1.18 !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.2px !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+  text-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.dashboard-header .title-panel h1:hover,
+.published-dashboard-title:hover,
+.dashboard-title:hover,
+.editable-title:hover {
+  font-size: 25px !important;
+  font-weight: 650 !important;
+  transform: none !important;
+}
+
+.dashboard-header .title-panel h1::after,
+.published-dashboard-title::after,
+.dashboard-title::after,
+.editable-title::after {
+  display: none !important;
+  content: none !important;
+}
+
+.dashboard-header button,
+.header-with-actions button,
+.btn {
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+}
+
+.dashboard-header .btn-default,
+.dashboard-header .btn-secondary,
+.header-with-actions .btn-default,
+.header-with-actions .btn-secondary {
+  background: #eaf6ff !important;
+  color: #075985 !important;
+  border: 1px solid rgba(14, 165, 233, 0.18) !important;
+  padding: 8px 17px !important;
+}
+
+/* ============================================================
+   5) FILTER SIDEBAR — SOFT PROFESSIONAL
+   ============================================================ */
+.filter-bar,
+.native-filters-sidebar,
+div[data-test="filter-bar"] {
+  background:
+    linear-gradient(180deg, var(--sirh-filter-bg-2) 0%, var(--sirh-filter-bg) 100%) !important;
+  border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: var(--sirh-shadow-filter) !important;
+  padding: 18px 16px !important;
+}
+
+.filter-bar::before,
+.native-filters-sidebar::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Bouton masquer/afficher filtres */
+[data-test="filter-bar__collapse-button"],
+[data-test="filter-bar__expand-button"],
+[data-test="filter-bar-toggle"],
+[data-test="filter-bar__toggle-button"],
+.filter-bar__collapse-button,
+.filter-bar__expand-button,
+.filter-bar__toggle-button,
+button[aria-label*="filtre"],
+button[aria-label*="Filtre"],
+button[aria-label*="filter"],
+button[aria-label*="Filter"],
+button[title*="filtre"],
+button[title*="Filtre"],
+button[title*="filter"],
+button[title*="Filter"] {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.10) !important;
+  z-index: 9999 !important;
+}
+
+.filter-bar h3,
+.filter-bar h4,
+.native-filters-sidebar h3,
+.native-filters-sidebar h4 {
+  color: var(--sirh-title) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+}
+
+.filter-bar label,
+.native-filters-sidebar label,
+.filter-control-title {
+  color: #334155 !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 7px !important;
+}
+
+.filter-bar a,
+.native-filters-sidebar a,
+.filter-bar .btn-link,
+.native-filters-sidebar .btn-link {
+  color: #0e7490 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+.filter-bar .filter-control,
+.native-filters-sidebar .filter-control,
+.filter-bar .dashboard-native-filter,
+.native-filters-sidebar .dashboard-native-filter,
+.filter-bar [data-test*="filter-control"],
+.native-filters-sidebar [data-test*="filter-control"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin-bottom: 18px !important;
+}
+
+.filter-bar .ant-select-selector,
+.native-filters-sidebar .ant-select-selector,
+.ant-select-selector {
+  min-height: 39px !important;
+  display: flex !important;
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.13) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.035) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.filter-bar .ant-select-selector:hover,
+.native-filters-sidebar .ant-select-selector:hover,
+.ant-select-selector:hover {
+  border-color: rgba(6, 182, 212, 0.42) !important;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.09) !important;
+}
+
+.filter-bar .ant-select-selection-placeholder,
+.native-filters-sidebar .ant-select-selection-placeholder {
+  color: #9aa6b8 !important;
+  font-weight: 500 !important;
+}
+
+.filter-bar .btn-primary,
+.native-filters-sidebar .btn-primary {
+  width: 100% !important;
+  background: linear-gradient(135deg, var(--sirh-blue), var(--sirh-cyan)) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 13px !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 9px 20px rgba(37, 99, 235, 0.20) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.35px !important;
+}
+
+.filter-bar .btn-default,
+.filter-bar .btn-secondary,
+.native-filters-sidebar .btn-default,
+.native-filters-sidebar .btn-secondary {
+  width: 100% !important;
+  margin-top: 7px !important;
+  background: #edf3f8 !important;
+  color: #64748b !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 13px !important;
+  padding: 9px 14px !important;
+}
+
+/* ============================================================
+   6) NAVIGATION MARKDOWN
+   ============================================================ */
+.dashboard-component-text {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.92), rgba(244,249,253,0.90)) !important;
+  border: 1px solid rgba(15, 23, 42, 0.07) !important;
+  border-radius: 22px !important;
+  box-shadow: var(--sirh-shadow-card) !important;
+  padding: 21px 23px !important;
+  margin-bottom: 22px !important;
+}
+
+.dashboard-component-text::before,
+.dashboard-component-text::after {
+  display: none !important;
+  content: none !important;
+}
+
+.dashboard-component-text h1,
+.dashboard-component-text h2,
+.dashboard-component-text h3,
+.dashboard-component-text strong {
+  color: var(--sirh-text) !important;
+  font-family: var(--sirh-title-font) !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+}
+
+.dashboard-component-text a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 4px 5px 4px 0 !important;
+  padding: 7px 13px !important;
+  border-radius: 999px !important;
+  background: #eef6ff !important;
+  color: #075985 !important;
+  border: 1px solid rgba(14, 165, 233, 0.17) !important;
+  text-decoration: none !important;
+  font-weight: 650 !important;
+  transition: background 0.15s ease, color 0.15s ease !important;
+}
+
+.dashboard-component-text a:hover {
+  background: linear-gradient(135deg, var(--sirh-blue), var(--sirh-cyan)) !important;
+  color: white !important;
+}
+
+/* ============================================================
+   7) CHART CARDS
+   ============================================================ */
+.dashboard-component-chart-holder,
+.chart-slice,
+.slice_container,
+.grid div[id^="slice"],
+.dashboard-component {
+  background:
+    linear-gradient(180deg, var(--sirh-card-2) 0%, var(--sirh-card) 100%) !important;
+  border: 1px solid var(--sirh-card-border) !important;
+  border-radius: var(--sirh-radius) !important;
+  box-shadow: var(--sirh-shadow-card) !important;
+  overflow: visible !important;
+  transition: box-shadow 0.18s ease !important;
+}
+
+.dashboard-component-chart-holder::before,
+.chart-slice::before,
+.slice_container::before,
+.grid div[id^="slice"]::before,
+.dashboard-component::before {
+  display: none !important;
+  content: none !important;
+}
+
+.dashboard-component-chart-holder:hover,
+.chart-slice:hover,
+.slice_container:hover {
+  transform: none !important;
+  box-shadow: var(--sirh-shadow-card-hover) !important;
+}
+
+/* ============================================================
+   8) TITRES CHARTS — VERSION CORRECTION FORTE
+   ============================================================ */
+
+/* Masque le tooltip noir UNIQUEMENT sur les titres de chart, clic conservé.
+   Scopé à .chart-header/.slice-header (pas global) pour ne pas supprimer
+   les tooltips utiles ailleurs dans l'UI Superset (filtres, colonnes tronquées). */
+.chart-header .ant-tooltip,
+.chart-header .ant-tooltip-placement-top,
+.chart-header .ant-tooltip-placement-bottom,
+.chart-header .ant-tooltip-placement-left,
+.chart-header .ant-tooltip-placement-right,
+.chart-header .tooltip,
+.chart-header .tooltip-inner,
+.chart-header [role="tooltip"],
+.slice-header .ant-tooltip,
+.slice-header .ant-tooltip-placement-top,
+.slice-header .ant-tooltip-placement-bottom,
+.slice-header .ant-tooltip-placement-left,
+.slice-header .ant-tooltip-placement-right,
+.slice-header .tooltip,
+.slice-header .tooltip-inner,
+.slice-header [role="tooltip"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Header de chart : hauteur auto + pas de coupe */
+.chart-header,
+.slice-header,
+.dashboard-component-chart-holder .chart-header,
+.dashboard-component-chart-holder .slice-header {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.055) !important;
+  box-shadow: none !important;
+  padding: 13px 18px 12px 18px !important;
+  min-height: 76px !important;
+  height: auto !important;
+  max-height: none !important;
+  position: relative !important;
+  transform: none !important;
+  transition: none !important;
+  overflow: visible !important;
+}
+
+/* Superset met parfois un conteneur interne: on le force aussi */
+.chart-header > *,
+.slice-header > *,
+.dashboard-component-chart-holder .chart-header > *,
+.dashboard-component-chart-holder .slice-header > * {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
+/* Trait de couleur discret */
+.chart-header::before,
+.slice-header::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 18px !important;
+  bottom: -1px !important;
+  width: 64px !important;
+  height: 3px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, var(--sirh-blue), var(--sirh-cyan), var(--sirh-pink)) !important;
+}
+
+/* Titre cliquable */
+.chart-header a,
+.slice-header a,
+.chart-header-title a,
+.header-title a,
+.dashboard-component-chart-holder .chart-header a,
+.dashboard-component-chart-holder .slice-header a {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+}
+
+/* Titre complet, taille réduite pour éviter la coupe */
+.chart-header .chart-header-title,
+.slice-header .header-title,
+.header-title,
+.chart-header-title,
+.dashboard-component-chart-holder .chart-header a,
+.dashboard-component-chart-holder .slice-header a {
+  display: block !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  font-family: var(--sirh-title-font) !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15px !important;
+  line-height: 1.25 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+  text-decoration: none !important;
+}
+
+/* Désactiver la troncature */
+.chart-header-title,
+.header-title,
+.chart-header .chart-header-title,
+.slice-header .header-title {
+  padding-left: 0 !important;
+  white-space: normal !important;
+  max-width: calc(100% - 54px) !important;
+  width: calc(100% - 54px) !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Tout élément interne du titre */
+.chart-header-title *,
+.header-title *,
+.chart-header a *,
+.slice-header a * {
+  font-family: var(--sirh-title-font) !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.15px !important;
+  line-height: 1.25 !important;
+  transform: none !important;
+  transition: none !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* Hover stable */
+.chart-header:hover,
+.slice-header:hover,
+.chart-header:hover *,
+.slice-header:hover *,
+.dashboard-component-chart-holder:hover .chart-header,
+.dashboard-component-chart-holder:hover .slice-header {
+  transform: none !important;
+  transition: none !important;
+}
+
+.chart-header:hover .chart-header-title,
+.slice-header:hover .header-title,
+.header-title:hover,
+.chart-header-title:hover,
+.dashboard-component-chart-holder .chart-header a:hover,
+.dashboard-component-chart-holder .slice-header a:hover,
+.chart-header a:hover *,
+.slice-header a:hover * {
+  font-family: var(--sirh-title-font) !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.15px !important;
+  transform: none !important;
+  text-decoration: none !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+/* Menu trois points visible */
+.chart-header .dropdown,
+.chart-header .chart-header-right,
+.slice-header .dropdown,
+.slice-header .chart-header-right,
+.chart-header .dropdown *,
+.chart-header .chart-header-right *,
+.slice-header .dropdown *,
+.slice-header .chart-header-right * {
+  opacity: 0.80 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* ============================================================
+   9) KPI / BIG NUMBER
+   ============================================================ */
+.BigNumber,
+.big-number-container,
+div[class*="BigNumber"] {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(6, 182, 212, 0.10), transparent 35%),
+    radial-gradient(circle at 10% 90%, rgba(37, 99, 235, 0.07), transparent 38%),
+    #ffffff !important;
+  border-radius: 15px !important;
+  padding: 22px !important;
+}
+
+.BigNumber .header-line,
+.big-number-value,
+.bigNumber .header-line,
+div[class*="BigNumber"] .header-line {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  font-family: var(--sirh-font) !important;
+  font-size: 62px !important;
+  line-height: 0.95 !important;
+  font-weight: 500 !important;
+  letter-spacing: -2px !important;
+}
+
+.BigNumber .subheader-line,
+.big-number-label,
+.big-number-subtitle,
+div[class*="BigNumber"] .subheader-line {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  font-family: var(--sirh-font) !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.1px !important;
+  text-transform: none !important;
+}
+
+/* ============================================================
+   10) GRAPHS / TABLES
+   ============================================================ */
+svg text,
+.echarts text,
+.nvd3 text {
+  font-family: var(--sirh-font) !important;
+  fill: #475569 !important;
+}
+
+svg line,
+.nvd3 .tick line {
+  stroke: rgba(15, 23, 42, 0.10) !important;
+}
+
+.legend text,
+.echarts-legend text {
+  fill: #334155 !important;
+  font-weight: 500 !important;
+}
+
+.table,
+.TableChart table,
+.dataframe,
+table {
+  background: #ffffff !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.table thead th,
+.TableChart thead th,
+.dataframe thead th,
+table thead th {
+  background: #f3f7fb !important;
+  color: #1e293b !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  border-bottom: 1px solid var(--sirh-card-border) !important;
+  padding: 12px 14px !important;
+}
+
+.table tbody td,
+.TableChart tbody td,
+.dataframe tbody td,
+table tbody td {
+  color: #334155 !important;
+  font-weight: 450 !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.055) !important;
+  padding: 10px 14px !important;
+}
+
+.table tbody tr:nth-child(even),
+.TableChart tbody tr:nth-child(even),
+table tbody tr:nth-child(even) {
+  background: #fbfdff !important;
+}
+
+.table tbody tr:hover,
+.TableChart tbody tr:hover,
+table tbody tr:hover {
+  background: rgba(37, 99, 235, 0.055) !important;
+}
+
+/* ============================================================
+   11) SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dfe9f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--sirh-blue), var(--sirh-cyan));
+  border-radius: 999px;
+  border: 2px solid #dfe9f5;
+}
+
+/* ============================================================
+   12) RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .dashboard,
+  .dragdroppable-main {
+    padding: 16px !important;
+  }
+
+  .BigNumber .header-line,
+  .big-number-value,
+  div[class*="BigNumber"] .header-line {
+    font-size: 48px !important;
+  }
+
+  .chart-header,
+  .slice-header {
+    min-height: 82px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header .title-panel h1,
+  .published-dashboard-title,
+  .dashboard-title,
+  .editable-title {
+    font-size: 22px !important;
+  }
+
+  .chart-header .chart-header-title,
+  .slice-header .header-title,
+  .header-title,
+  .chart-header-title {
+    font-size: 13px !important;
+  }
+
+  .dashboard-component-text a {
+    display: flex !important;
+    width: 100%;
+    justify-content: center !important;
+    margin: 6px 0 !important;
+  }
+}
+
+/* ============================================================
+   13) PRINT
+   ============================================================ */
+@media print {
+  body,
+  .dashboard {
+    background: white !important;
+  }
+
+  .navbar,
+  .filter-bar,
+  .native-filters-sidebar,
+  .dashboard-header button,
+  .header-with-actions button,
+  .chart-header .dropdown,
+  .chart-header .chart-header-right {
+    display: none !important;
+  }
+
+  .dashboard-component-chart-holder,
+  .chart-slice,
+  .slice_container,
+  .dashboard-component-text {
+    box-shadow: none !important;
+    break-inside: avoid !important;
+    border: 1px solid #d7dee8 !important;
+  }
+}

@@ -1,0 +1,150 @@
+version: 2
+
+exposures:
+
+  - name: vue_d_ensemble_rh
+    label: "VUE D'ENSEMBLE RH"
+    type: dashboard
+    maturity: high
+    url: http://localhost:8088/dashboard/list/
+    description: >
+      Dashboard Superset reel : VUE D'ENSEMBLE RH.
+      Vue executive RH pour suivre les KPIs globaux, les effectifs, la mobilite,
+      les embauches mensuelles et la comparaison annuelle N vs N-1.
+    depends_on:
+      - ref('kpi_rh')
+      - ref('rh_kpi_annuel')
+      - ref('vw_effectifs_mensuels')
+      - ref('fait_effectifs')
+      - ref('fait_mobilite')
+      - ref('dim_temps')
+      - ref('dim_departement')
+    owner:
+      name: Equipe SIRH
+      email: admin@hr.sirh.com
+    meta:
+      superset_dashboard_name: "VUE D'ENSEMBLE RH"
+      superset_url: "http://localhost:8088"
+
+  - name: analyse_demographique
+    label: "ANALYSE DÉMOGRAPHIQUE"
+    type: dashboard
+    maturity: high
+    url: http://localhost:8088/dashboard/list/
+    description: >
+      Dashboard Superset reel : ANALYSE DÉMOGRAPHIQUE.
+      Analyse de la structure des effectifs par contrat, departement,
+      anciennete et periode d'embauche.
+    depends_on:
+      - ref('fait_effectifs')
+      - ref('rh_kpi_annuel')
+      - ref('dim_temps')
+      - ref('dim_departement')
+      - ref('dim_employe')
+    owner:
+      name: Equipe SIRH
+      email: admin@hr.sirh.com
+    meta:
+      superset_dashboard_name: "ANALYSE DÉMOGRAPHIQUE"
+      superset_url: "http://localhost:8088"
+
+  - name: analyse_competences
+    label: "ANALYSE COMPÉTENCES"
+    type: dashboard
+    maturity: high
+    url: http://localhost:8088/dashboard/list/
+    description: >
+      Dashboard Superset reel : ANALYSE COMPÉTENCES.
+      Analyse des competences demandees, des competences par departement
+      et des volumes de candidats associes.
+    depends_on:
+      - ref('fait_competences')
+      - ref('dim_competence')
+      - ref('dim_departement')
+      - ref('rh_kpi_annuel')
+    owner:
+      name: Equipe SIRH
+      email: admin@hr.sirh.com
+    meta:
+      superset_dashboard_name: "ANALYSE COMPÉTENCES"
+      superset_url: "http://localhost:8088"
+
+  - name: analyse_recrutement
+    label: "ANALYSE RECRUTEMENT"
+    type: dashboard
+    maturity: high
+    url: http://localhost:8088/dashboard/list/
+    description: >
+      Dashboard Superset reel : ANALYSE RECRUTEMENT.
+      Suivi des candidatures, scores IA, taux d'acceptation, offres,
+      departements recruteurs et analyse temporelle du recrutement.
+    depends_on:
+      - ref('fait_recrutement')
+      - ref('rh_kpi_annuel')
+      - ref('dim_temps')
+      - ref('dim_offre')
+      - ref('dim_departement')
+    owner:
+      name: Equipe SIRH
+      email: admin@hr.sirh.com
+    meta:
+      superset_dashboard_name: "ANALYSE RECRUTEMENT"
+      superset_url: "http://localhost:8088"
+
+  - name: analyse_ml
+    label: "ANALYSE ML"
+    type: dashboard
+    maturity: high
+    url: http://localhost:8088/dashboard/list/
+    description: >
+      Dashboard Superset : ANALYSE ML.
+      Analyses issues des modeles Machine Learning (scripts Python ml/) :
+      risque de turnover, segmentation des employes, high potentials,
+      prevision des embauches (Prophet), plan de retention, importance des
+      variables et correlations. Les tables ml_* sont produites par les scripts
+      Python en aval des modeles dbt (dim_employe, fait_recrutement, fait_effectifs).
+    depends_on:
+      - ref('dim_employe')
+      - ref('dim_departement')
+      - ref('fait_recrutement')
+      - ref('fait_effectifs')
+      - ref('kpi_rh')
+    owner:
+      name: Equipe SIRH
+      email: admin@hr.sirh.com
+    meta:
+      superset_dashboard_name: "ANALYSE ML"
+      superset_url: "http://localhost:8088"
+      ml_tables:
+        - ml_turnover_risk
+        - ml_employee_segments
+        - ml_high_potentials
+        - ml_forecast_embauches
+        - ml_retention_analysis
+        - ml_feature_importance
+        - ml_correlations
+      ml_scripts: "ml/run_all.py (turnover_model, segmentation_model, high_potentials, forecast_model, retention_analysis, correlations)"
+
+  - name: airflow_pipeline_etl
+    label: "Airflow - sirh_bi_pipeline"
+    type: application
+    maturity: high
+    url: http://localhost:8085
+    description: >
+      Pipeline Airflow sirh_bi_pipeline orchestrant l'ETL Python et dbt :
+      extract_staging, dbt_source_freshness, dbt_snapshot, dbt_run, dbt_test.
+    depends_on:
+      - ref('dim_temps')
+      - ref('kpi_rh')
+      - ref('rh_kpi_annuel')
+      - ref('vw_effectifs_mensuels')
+      - ref('fait_recrutement')
+      - ref('fait_effectifs')
+      - ref('fait_mobilite')
+      - ref('fait_competences')
+    owner:
+      name: Equipe SIRH
+      email: admin@hr.sirh.com
+    meta:
+      airflow_dag_id: "sirh_bi_pipeline"
+      airflow_url: "http://localhost:8085"

@@ -1,0 +1,23 @@
+artifact_path: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/models/m-945d3a8235a6415a9110d13cda28cfa2/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.12.0
+model_id: m-945d3a8235a6415a9110d13cda28cfa2
+model_size_bytes: 404658
+model_uuid: m-945d3a8235a6415a9110d13cda28cfa2
+prompts: null
+run_id: 5881b829f3254b2c942d71e5a2f68b8b
+utc_time_created: '2026-05-27 21:22:40.504215'

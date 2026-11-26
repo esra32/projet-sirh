@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-label="Carte Tunisie recrutements par ville">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#163447" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font: 700 26px Arial, sans-serif; fill: #1e2f43; }
+      .subtitle { font: 15px Arial, sans-serif; fill: #526577; }
+      .label { font: 700 15px Arial, sans-serif; fill: #24364b; }
+      .small { font: 13px Arial, sans-serif; fill: #526577; }
+      .metric { font: 700 24px Arial, sans-serif; fill: #102a43; }
+      .country { fill: #eef8f5; stroke: #0e7c7b; stroke-width: 3; }
+      .coast { fill: none; stroke: #b8d7d4; stroke-width: 2; stroke-dasharray: 5 7; }
+      .marker { stroke: #ffffff; stroke-width: 3; }
+      .callout { fill: #ffffff; stroke: #d7e4ed; stroke-width: 1.4; }
+      .grid { stroke: #e6eef5; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="430" rx="18" fill="#f7fbfd"/>
+  <text x="42" y="48" class="title">Carte Tunisie - recrutements par ville</text>
+  <text x="42" y="73" class="subtitle">Points locaux sans fond Mapbox externe : taille = volume d'offres, couleur = type de recrutement.</text>
+
+  <g transform="translate(60,88)">
+    <rect x="0" y="0" width="700" height="300" rx="18" fill="#ffffff" filter="url(#shadow)"/>
+    <path class="coast" d="M498 34 C555 65 596 122 589 182 C584 232 545 276 493 292"/>
+    <path class="country" d="M248 29 C298 10 358 26 407 18 C480 6 545 60 553 127 C560 180 540 219 577 263 C610 303 570 331 513 321 C461 312 424 287 375 300 C313 317 244 301 211 253 C180 208 199 164 184 125 C165 75 198 43 248 29 Z"/>
+
+    <path class="grid" d="M88 58 H635 M88 118 H635 M88 178 H635 M88 238 H635"/>
+    <path class="grid" d="M160 24 V280 M280 24 V280 M400 24 V280 M520 24 V280"/>
+
+    <circle cx="463" cy="65" r="18" fill="#3266cc" class="marker"/>
+    <circle cx="486" cy="72" r="8" fill="#ff9800" class="marker"/>
+    <text x="497" y="60" class="label">Tunis</text>
+    <text x="497" y="78" class="small">162 interne + 17 externe</text>
+
+    <circle cx="438" cy="58" r="12" fill="#3266cc" class="marker"/>
+    <text x="326" y="53" class="small">Ariana 66</text>
+
+    <circle cx="451" cy="86" r="12" fill="#3266cc" class="marker"/>
+    <text x="310" y="91" class="small">Ben Arous 71</text>
+
+    <circle cx="504" cy="144" r="17" fill="#3266cc" class="marker"/>
+    <text x="524" y="139" class="label">Sousse</text>
+    <text x="524" y="157" class="small">149 offres</text>
+
+    <circle cx="522" cy="165" r="15" fill="#3266cc" class="marker"/>
+    <text x="544" y="175" class="small">Monastir 110</text>
+
+    <circle cx="523" cy="232" r="17" fill="#3266cc" class="marker"/>
+    <circle cx="545" cy="246" r="5" fill="#ff9800" class="marker"/>
+    <text x="548" y="231" class="label">Sfax</text>
+    <text x="548" y="249" class="small">145 interne + 4 externe</text>
+
+    <circle cx="358" cy="220" r="13" fill="#e4572e" class="marker"/>
+    <text x="210" y="216" class="label">Remote Tunisie</text>
+    <text x="236" y="234" class="small">84 offres</text>
+
+    <text x="28" y="276" class="small">Contour simplifie de la Tunisie pour affichage local stable.</text>
+  </g>
+
+  <g transform="translate(805,102)">
+    <rect x="0" y="0" width="335" height="274" rx="18" fill="#ffffff" filter="url(#shadow)"/>
+    <text x="28" y="42" class="label">Lecture rapide</text>
+
+    <text x="28" y="88" class="metric">808</text>
+    <text x="92" y="83" class="small">offres localisees TN</text>
+    <text x="92" y="101" class="small">sur la source recrutement</text>
+
+    <circle cx="37" cy="139" r="8" fill="#3266cc"/>
+    <text x="58" y="144" class="small">Interne : 703 offres</text>
+    <circle cx="37" cy="171" r="8" fill="#e4572e"/>
+    <text x="58" y="176" class="small">Remote : 84 offres</text>
+    <circle cx="37" cy="203" r="8" fill="#ff9800"/>
+    <text x="58" y="208" class="small">Externe / Autre : 21 offres</text>
+
+    <line x1="28" y1="228" x2="305" y2="228" stroke="#e6eef5"/>
+    <text x="28" y="253" class="small">Villes visibles : Tunis, Ariana, Ben Arous, Sousse, Monastir, Sfax.</text>
+  </g>
+</svg>

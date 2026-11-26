@@ -1,0 +1,11 @@
+sirh_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: mysql
+      server: localhost
+      port: 3306
+      database: sirh_dwh
+      schema: sirh_dwh
+      username: root
+      password: root

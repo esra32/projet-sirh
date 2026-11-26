@@ -1,0 +1,53 @@
+@startuml auth_sequence
+title Diagramme de Séquence — Authentification SSO (US04 · US05 · US06)
+
+skinparam backgroundColor #FAFAFA
+skinparam sequenceArrowThickness 1.5
+skinparam ParticipantPadding 15
+skinparam BoxPadding 10
+skinparam sequence {
+    ArrowColor #5C6BC0
+    ActorBorderColor #5C6BC0
+    ActorBackgroundColor #E8EAF6
+    ParticipantBorderColor #5C6BC0
+    ParticipantBackgroundColor #E8EAF6
+    LifeLineBorderColor #9E9E9E
+    LifeLineBackgroundColor #ECEFF1
+    NoteBackgroundColor #FFF9C4
+    NoteBorderColor #F9A825
+}
+
+actor "Employé" as Emp
+participant "Angular\nFrontend" as Angular
+participant "Spring Cloud\nGateway\n(:8080)" as Gateway
+participant "Keycloak\nServer (SSO)" as Keycloak
+participant "Microservice\nEmployee\n(:8082)" as EmpService
+
+Emp -> Angular : 1 Cliquer sur "Connexion"
+Angular -> Gateway : 2 Requête d\'accès protégée
+Gateway --> Angular : 3 Redirection vers Keycloak login page
+
+Emp -> Keycloak : 4 Saisir Identifiants (Login/Password)
+Keycloak -> Keycloak : 5 Valider les identifiants
+
+Keycloak --> Angular : 6 Retourne Authorization Code + Redirection
+Angular -> Keycloak : 7 Échanger Code contre Tokens (AccessToken JWT)
+Keycloak --> Angular : 8 Délivre AccessToken (JWT) & RefreshToken
+
+== Requête Authentifiée vers l'API ==
+
+Angular -> Gateway : 9 GET /api/employees/me  [Bearer JWT]
+Gateway -> Gateway : 10 Valider la signature du JWT\n(HS256 via JWT_SECRET)\n[optionnel : Keycloak JWKS si configuré]
+
+alt [Token Valide]
+    Gateway -> EmpService : 11 Router la requête [Bearer JWT]\n     X-Auth-User: <email>\n     X-Auth-Roles: <rôles>
+    EmpService -> EmpService : 12 Spring Security lit X-Auth-Roles\net construit le SecurityContext
+    EmpService --> Gateway : 13 200 OK (Données du profil)
+    Gateway --> Angular : 14 200 OK (Données du profil)
+    Angular --> Emp : 15 Afficher l\'espace personnel sécurisé
+else [Token Invalide/Expiré]
+    Gateway --> Angular : 16 401 Unauthorized
+    Angular --> Emp : 17 Redirection vers la page de connexion
+end
+
+@enduml

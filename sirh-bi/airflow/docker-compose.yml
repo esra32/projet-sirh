@@ -1,0 +1,91 @@
+# =============================================================================
+# Apache Airflow — Pipeline SIRH BI
+# =============================================================================
+# Orchestration du pipeline ETL/dbt quotidien
+#
+# Démarrage :
+#   docker compose up -d
+#   Attendre 2-3 minutes (installation dbt-mysql au démarrage)
+#   Ouvrir http://localhost:8085
+#   Login : admin / admin123
+#
+# Arrêt :
+#   docker compose down
+# =============================================================================
+
+services:
+  airflow:
+    image: apache/airflow:2.9.1
+    container_name: airflow-sirh
+    environment:
+      # Exécuteur séquentiel — parfait pour un seul pipeline
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+
+      # Base de métadonnées SQLite — simple, pas besoin de Postgres
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+
+      # Désactive les DAGs d'exemple (gardons seulement le nôtre)
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+
+      # Clé secrète pour le webserver
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'sirh-pfe-2026-secret-key'
+      AIRFLOW__WEBSERVER__BASE_URL: 'http://localhost:8085'
+      AIRFLOW__WEBSERVER__WEB_SERVER_MASTER_TIMEOUT: '300'
+      AIRFLOW__WEBSERVER__WEB_SERVER_WORKER_TIMEOUT: '300'
+      AIRFLOW__WEBSERVER__WORKERS: '2'
+
+      # Fuseau horaire
+      AIRFLOW__CORE__DEFAULT_TIMEZONE: 'Europe/Paris'
+
+      # Packages Python à installer au démarrage (dbt + drivers MySQL + libs ML)
+      # Les libs ML sont requises par les tâches ml_* (turnover/segmentation/
+      # forecast/correlations). Versions compatibles numpy 1.26 / py3.12.
+      # cmdstanpy==1.2.4 IMPÉRATIF : 1.3.0 casse le backend Stan de prophet 1.1.5
+      # (exige un makefile absent du cmdstan embarqué → 'no attribute stan_backend')
+      _PIP_ADDITIONAL_REQUIREMENTS: 'dbt-mysql==1.7.0 pymysql==1.1.1 scikit-learn==1.4.2 scipy==1.13.1 shap==0.45.1 prophet==1.1.5 cmdstanpy==1.2.4'
+
+      # Variables d'environnement MySQL (accessible depuis Docker via host.docker.internal)
+      SIRH_MYSQL_HOST: host.docker.internal
+      SIRH_MYSQL_PORT: '3306'
+      SIRH_MYSQL_USER: root
+      SIRH_MYSQL_PASSWORD: root
+
+    volumes:
+      # Dossier des DAGs (notre pipeline)
+      - ./dags:/opt/airflow/dags
+
+      # Projet dbt monté dans le container
+      - ../dbt_sirh:/opt/sirh/dbt_sirh
+
+      # Scripts ETL Python montés dans le container
+      - ../extract:/opt/sirh/extract
+
+      # Fichier de config ETL
+      - ../:/opt/sirh
+
+      # Persistence des données Airflow (DB, logs)
+      - airflow-home:/opt/airflow
+
+    ports:
+      - "8085:8080"
+
+    # Permet au container d'accéder à MySQL sur la machine hôte (Windows)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    # Lance Airflow en mode standalone (webserver + scheduler en un seul process)
+    command:
+      - bash
+      - -c
+      - |
+        set -e
+        airflow db migrate
+        airflow users create --username admin --firstname Admin --lastname SIRH --role Admin --email admin@example.com --password admin123 || airflow users reset-password --username admin --password admin123
+        airflow scheduler &
+        exec airflow webserver --host 0.0.0.0 --port 8080
+
+    restart: unless-stopped
+
+volumes:
+  airflow-home:
+    driver: local

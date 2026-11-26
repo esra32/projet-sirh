@@ -1,0 +1,108 @@
+@startuml employee_fiche_sequence
+title Fiche Employé — US07 (Consultation) & US08 (Modification)
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 13
+skinparam defaultFontName Arial
+skinparam sequenceArrowThickness 1.5
+skinparam ParticipantPadding 20
+skinparam LifelineStrategy solid
+
+skinparam sequence {
+    ArrowColor        #3F51B5
+    ActorBorderColor  #3F51B5
+    ActorBackgroundColor #E8EAF6
+    ParticipantBorderColor  #3F51B5
+    ParticipantBackgroundColor #E8EAF6
+    LifeLineBorderColor #BDBDBD
+    NoteBackgroundColor #FFFDE7
+    NoteBorderColor   #FBC02D
+    GroupBackgroundColor #EDE7F6
+    GroupBorderColor  #7E57C2
+    GroupHeaderFontColor #4527A0
+    GroupHeaderFontSize 13
+}
+
+'──────────────── Acteurs ────────────────
+actor       "Administrateur RH"  as RH
+participant "Angular UI"         as Angular
+participant "Gateway\n(:8080)"   as Gateway
+participant "EmployeeController" as Ctrl
+participant "EmployeeService"    as Svc
+participant "EmployeeRepository" as Repo
+database    "MySQL"              as DB
+
+'──────────────── Pré-requis ─────────────
+ref over RH, Angular, Gateway
+    Authentification préalable — JWT obtenu via Auth-Service / Keycloak
+end ref
+
+|||
+
+'══════════════ US07 — Consultation ══════════════
+group US07 — Consultation du dossier
+
+RH    ->  Angular  : 1. Sélectionner un employé dans la liste
+Angular -> Gateway  : 2. GET /api/employees/{id}\n     [Authorization: Bearer JWT]
+Gateway -> Gateway  : 3. Valider le JWT (HS256)
+Gateway -> Ctrl     : 4. GET /api/employees/{id}\n     [X-Auth-User · X-Auth-Roles]
+
+Ctrl  ->  Svc   : 5. findById(id)
+Svc   ->  Repo  : 6. findById(id)
+Repo  ->  DB    : 7. SELECT * FROM employee\n   WHERE id = ?
+DB    --> Repo  : 8. Données de l'employé
+
+note right of Repo
+  Si absent :
+  ResourceNotFoundException
+  → 404 Not Found
+end note
+
+Repo  --> Svc   : 9. Employee entity
+Svc   ->  Svc   : 10. toDto(Employee)
+Svc   --> Ctrl  : 11. EmployeeDTO
+Ctrl  --> Gateway : 12. 200 OK (JSON)
+Gateway --> Angular : 12. 200 OK (JSON)
+Angular --> RH  : 13. Afficher le profil de l'employé
+
+end
+
+|||
+
+'══════════════ US08 — Modification ══════════════
+group US08 — Modification du dossier
+
+RH    ->  Angular  : 14. Modifier les champs & valider
+Angular -> Gateway  : 15. PUT /api/employees/{id}\n     [Body: EmployeeRequest · Bearer JWT]
+Gateway -> Gateway  : 16. Valider JWT\n     + rôle HR_ADMIN ou MANAGER
+
+note right of Gateway
+  403 Forbidden
+  si rôle insuffisant
+end note
+
+Gateway -> Ctrl  : 17. PUT /api/employees/{id}\n     [Body: EmployeeRequest]
+
+note right of Ctrl
+  @PreAuthorize(
+    "hasAuthority('HR_ADMIN')
+     or hasAuthority('MANAGER')")
+end note
+
+Ctrl  ->  Svc   : 18. update(id, EmployeeRequest)
+Svc   ->  Repo  : 19. findById(id)
+Repo  --> Svc   : 20. Employee entité existante
+Svc   ->  Svc   : 21. fromRequest(emp, req)\n     — mise à jour des champs
+Svc   ->  Repo  : 22. save(Employee)
+Repo  ->  DB    : 23. UPDATE employee\n   SET ... WHERE id = ?
+DB    --> Repo  : 24. Confirmation SQL
+Repo  --> Svc   : 25. Employee sauvegardé
+Svc   ->  Svc   : 26. toDto(Employee)
+Svc   --> Ctrl  : 27. EmployeeDTO mis à jour
+Ctrl  --> Gateway : 28. 200 OK
+Gateway --> Angular : 28. 200 OK
+Angular --> RH  : 29. "Dossier mis à jour avec succès"
+
+end
+
+@enduml

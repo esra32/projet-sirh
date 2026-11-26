@@ -1,0 +1,151 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="Constellation_DWH" id="sirh-constellation">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITRE -->
+        <mxCell id="titre" value="SCHEMA EN CONSTELLATION — DATA WAREHOUSE SIRH" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="500" y="10" width="600" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="soustitre" value="5 tables de faits + 6 dimensions conformes (dim_temps et dim_departement partagees)" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fillColor=none;strokeColor=none;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="500" y="44" width="600" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ============ DIMENSIONS (bleu) ============ -->
+
+        <!-- dim_temps (centre haut) -->
+        <mxCell id="dim_temps" value="dim_temps" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="90" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="dt1" value="PK  id_temps_sk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_temps"><mxGeometry y="30" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dt2" value="date_jour" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_temps"><mxGeometry y="56" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dt3" value="mois / nom_mois" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_temps"><mxGeometry y="82" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dt4" value="trimestre / annee" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_temps"><mxGeometry y="108" width="200" height="26" as="geometry"/></mxCell>
+
+        <!-- dim_employe (gauche haut) -->
+        <mxCell id="dim_employe" value="dim_employe" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="90" width="210" height="186" as="geometry" />
+        </mxCell>
+        <mxCell id="de1" value="PK  id_employe_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_employe"><mxGeometry y="30" width="210" height="26" as="geometry"/></mxCell>
+        <mxCell id="de2" value="nom_complet / email" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_employe"><mxGeometry y="56" width="210" height="26" as="geometry"/></mxCell>
+        <mxCell id="de3" value="type_contrat / salaire" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_employe"><mxGeometry y="82" width="210" height="26" as="geometry"/></mxCell>
+        <mxCell id="de4" value="anciennete_mois" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_employe"><mxGeometry y="108" width="210" height="26" as="geometry"/></mxCell>
+        <mxCell id="de5" value="is_parti / profil_fidelisation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_employe"><mxGeometry y="134" width="210" height="26" as="geometry"/></mxCell>
+
+        <!-- dim_offre (droite haut) -->
+        <mxCell id="dim_offre" value="dim_offre" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="90" width="200" height="186" as="geometry" />
+        </mxCell>
+        <mxCell id="do1" value="PK  id_offre_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_offre"><mxGeometry y="30" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="do2" value="titre / departement" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_offre"><mxGeometry y="56" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="do3" value="localisation / statut" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_offre"><mxGeometry y="82" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="do4" value="date_publication" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_offre"><mxGeometry y="108" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="do5" value="duree_offre_jours" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_offre"><mxGeometry y="134" width="200" height="26" as="geometry"/></mxCell>
+
+        <!-- dim_departement (centre bas) -->
+        <mxCell id="dim_dept" value="dim_departement" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="860" width="200" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="dd1" value="PK  id_departement_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_dept"><mxGeometry y="30" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dd2" value="nom" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_dept"><mxGeometry y="56" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dd3" value="est_actuel" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_dept"><mxGeometry y="82" width="200" height="26" as="geometry"/></mxCell>
+
+        <!-- dim_poste (gauche bas) -->
+        <mxCell id="dim_poste" value="dim_poste" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="860" width="200" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="dp1" value="PK  id_poste_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_poste"><mxGeometry y="30" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dp2" value="titre" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_poste"><mxGeometry y="56" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dp3" value="niveau_poste" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_poste"><mxGeometry y="82" width="200" height="26" as="geometry"/></mxCell>
+
+        <!-- dim_competence (droite bas) -->
+        <mxCell id="dim_comp" value="dim_competence" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="860" width="200" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="dc1" value="PK  id_competence_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_comp"><mxGeometry y="30" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dc2" value="nom" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_comp"><mxGeometry y="56" width="200" height="26" as="geometry"/></mxCell>
+        <mxCell id="dc3" value="categorie_competence" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="dim_comp"><mxGeometry y="82" width="200" height="26" as="geometry"/></mxCell>
+
+        <!-- ============ FAITS (orange, au centre) ============ -->
+
+        <!-- fait_recrutement -->
+        <mxCell id="fait_recrutement" value="fait_recrutement" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="400" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="fr1" value="FK  id_temps_depot" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_recrutement"><mxGeometry y="30" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fr2" value="FK  id_offre_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_recrutement"><mxGeometry y="56" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fr3" value="FK  id_departement_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_recrutement"><mxGeometry y="82" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fr4" value="M  match_score" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=2;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_recrutement"><mxGeometry y="108" width="220" height="26" as="geometry"/></mxCell>
+
+        <!-- fait_effectifs -->
+        <mxCell id="fait_effectifs" value="fait_effectifs" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="400" width="220" height="186" as="geometry" />
+        </mxCell>
+        <mxCell id="fe1" value="FK  id_temps_sk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_effectifs"><mxGeometry y="30" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fe2" value="FK  id_employe_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_effectifs"><mxGeometry y="56" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fe3" value="FK  id_departement_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_effectifs"><mxGeometry y="82" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fe4" value="FK  id_poste_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_effectifs"><mxGeometry y="108" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fe5" value="M  nb_employes" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=2;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_effectifs"><mxGeometry y="134" width="220" height="26" as="geometry"/></mxCell>
+
+        <!-- fait_mobilite -->
+        <mxCell id="fait_mobilite" value="fait_mobilite" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="640" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="fm1" value="FK  id_temps_sk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_mobilite"><mxGeometry y="30" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fm2" value="FK  id_departement_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_mobilite"><mxGeometry y="56" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fm3" value="FK  id_poste_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_mobilite"><mxGeometry y="82" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fm4" value="M  nb_embauches_mois" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=2;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_mobilite"><mxGeometry y="108" width="220" height="26" as="geometry"/></mxCell>
+
+        <!-- fait_competences -->
+        <mxCell id="fait_competences" value="fait_competences" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="640" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="fc1" value="FK  id_temps_sk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_competences"><mxGeometry y="30" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fc2" value="FK  id_competence_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_competences"><mxGeometry y="56" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fc3" value="FK  id_offre_nk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_competences"><mxGeometry y="82" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fc4" value="M  nb_candidats / nb_offres" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=2;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_competences"><mxGeometry y="108" width="220" height="26" as="geometry"/></mxCell>
+
+        <!-- fait_gap_competences (derive) -->
+        <mxCell id="fait_gap" value="fait_gap_competences" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="640" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="fg1" value="competence" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_gap"><mxGeometry y="30" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fg2" value="nb_offres_requierent" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_gap"><mxGeometry y="56" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fg3" value="M  gap_competences" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=2;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_gap"><mxGeometry y="82" width="220" height="26" as="geometry"/></mxCell>
+        <mxCell id="fg4" value="M  taux_couverture_pct" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;fontStyle=2;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="fait_gap"><mxGeometry y="108" width="220" height="26" as="geometry"/></mxCell>
+
+        <!-- ============ LIAISONS ============ -->
+        <!-- fait_effectifs -->
+        <mxCell id="l_fe_dt" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_effectifs" target="dim_temps"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fe_de" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_effectifs" target="dim_employe"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fe_dd" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_effectifs" target="dim_dept"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fe_dp" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_effectifs" target="dim_poste"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- fait_recrutement -->
+        <mxCell id="l_fr_dt" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_recrutement" target="dim_temps"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fr_do" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_recrutement" target="dim_offre"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fr_dd" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_recrutement" target="dim_dept"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- fait_mobilite -->
+        <mxCell id="l_fm_dt" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_mobilite" target="dim_temps"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fm_dd" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_mobilite" target="dim_dept"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fm_dp" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_mobilite" target="dim_poste"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- fait_competences -->
+        <mxCell id="l_fc_dt" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_competences" target="dim_temps"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fc_dc" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_competences" target="dim_comp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l_fc_do" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=ERone;startArrow=ERmany;strokeColor=#6c8ebf;" edge="1" parent="1" source="fait_competences" target="dim_offre"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- fait_gap derive -->
+        <mxCell id="l_fg_fc" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;endArrow=open;startArrow=none;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="fait_gap" target="fait_competences"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- LEGENDE -->
+        <mxCell id="legende" value="LEGENDE :   Bleu = Dimension conforme   |   Orange = Table de faits   |   Jaune pointille = Fait derive&#10;PK = cle primaire   FK = cle etrangere   M = mesure (italique)&#10;dim_temps et dim_departement sont PARTAGEES par plusieurs faits = dimensions conformes (constellation)" style="text;html=1;align=left;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#999999;spacing=8;rounded=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="600" y="290" width="440" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

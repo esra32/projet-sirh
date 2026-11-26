@@ -1,0 +1,108 @@
+version: 2
+
+models:
+  - name: rh_kpi_annuel
+    description: >
+      Vue annuelle dediee a Superset pour les comparaisons annee N vs N-1,
+      avec effectifs, embauches, recrutement et contrats par departement.
+    columns:
+      - name: annee
+        description: "Annee d'analyse"
+        tests:
+          - not_null
+      - name: date_annee
+        description: "Date temporelle Superset representant le premier jour de l'annee"
+        tests:
+          - not_null
+      - name: departement
+        description: "Departement RH"
+        tests:
+          - not_null
+      - name: nb_embauches_annee
+        description: "Nombre d'embauches de l'annee"
+      - name: nb_embauches_annee_n_1
+        description: "Nombre d'embauches de l'annee precedente"
+      - name: variation_embauches_pct_vs_n_1
+        description: "Variation en pourcentage des embauches vs N-1"
+      - name: effectif_fin_annee
+        description: "Effectif cumule de fin d'annee"
+      - name: effectif_fin_annee_n_1
+        description: "Effectif cumule de fin d'annee precedente"
+      - name: variation_effectif_pct_vs_n_1
+        description: "Variation en pourcentage de l'effectif vs N-1"
+      - name: taux_acceptation_pct
+        description: "Taux d'acceptation annuel des candidatures"
+
+  - name: rh_contrats_annuel
+    description: >
+      Vue reporting dediee a Superset pour construire un Pie Chart ou Donut Chart
+      de la repartition annuelle des contrats. Transforme les colonnes de contrats
+      de rh_kpi_annuel en lignes par type de contrat.
+    columns:
+      - name: annee
+        description: "Annee d'analyse"
+        tests:
+          - not_null
+      - name: date_annee
+        description: "Date temporelle Superset representant le premier jour de l'annee"
+        tests:
+          - not_null
+      - name: departement
+        description: "Departement RH"
+        tests:
+          - not_null
+      - name: type_contrat
+        description: "Type de contrat : CDI, CDD, STAGE, FREELANCE ou ALTERNANCE"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['CDI', 'CDD', 'STAGE', 'FREELANCE', 'ALTERNANCE']
+      - name: nb_employes
+        description: "Nombre d'employes pour le type de contrat, l'annee et le departement"
+        tests:
+          - not_null
+
+  - name: rh_funnel_recrutement
+    description: >
+      Vue reporting dediee a Superset pour construire un Funnel Chart du processus
+      de recrutement interne : offres publiees, candidatures recues, entretiens
+      planifies et candidatures acceptees.
+    columns:
+      - name: etape
+        description: "Libelle de l'etape du funnel de recrutement"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Offres publiées', 'Candidatures reçues', 'Entretiens planifiés', 'Candidatures acceptées']
+      - name: ordre
+        description: "Ordre d'affichage des etapes dans Superset"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4]
+      - name: nombre
+        description: "Nombre d'elements pour l'etape du funnel"
+        tests:
+          - not_null
+
+  - name: rh_localisation_recrutement
+    description: >
+      Vue reporting dediee a Superset pour analyser le recrutement par localisation
+      et type de recrutement.
+    columns:
+      - name: localisation
+        description: "Localisation de l'offre de recrutement"
+        tests:
+          - not_null
+      - name: pays_iso
+        description: "Code pays ISO derive de la localisation"
+      - name: type_recrutement
+        description: "Type de recrutement calcule a partir de la localisation"
+      - name: nb_offres
+        description: "Nombre de candidatures/offres observees pour la localisation"
+      - name: score_moyen
+        description: "Score moyen de matching des candidatures"
+      - name: nb_acceptes
+        description: "Nombre de candidatures acceptees"
+      - name: taux_acceptation
+        description: "Taux d'acceptation des candidatures en pourcentage"

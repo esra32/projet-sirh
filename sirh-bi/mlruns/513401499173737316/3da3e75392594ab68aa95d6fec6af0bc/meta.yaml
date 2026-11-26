@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/3da3e75392594ab68aa95d6fec6af0bc/artifacts
+end_time: 1782328930903
+entry_point_name: ''
+experiment_id: '513401499173737316'
+lifecycle_stage: active
+run_id: 3da3e75392594ab68aa95d6fec6af0bc
+run_name: XGBoost_v4_20260624_212203
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1782328923962
+status: 3
+tags: []
+user_id: Hp

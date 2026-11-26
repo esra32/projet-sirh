@@ -1,0 +1,103 @@
+version: 2
+
+sources:
+  - name: staging
+    description: >
+      Zone de staging SIRH. Tables brutes extraites depuis les bases opérationnelles
+      (sirh_employee, sirh_recruitment) par le pipeline ETL Python (extract_staging.py).
+      Ces tables sont le point d'entrée du pipeline dbt — chaque modèle stg_* lit depuis ici.
+    schema: sirh_staging
+
+    # Vérification fraîcheur : les données ne doivent pas avoir plus de 25h
+    # (pipeline quotidien à 02h00 → tolérance de 1h de marge)
+    freshness:
+      warn_after: {count: 25, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: extracted_at
+
+    tables:
+      - name: stg_employees
+        description: "Employés bruts depuis sirh_employee. Contient 1500 actifs + colonnes techniques (extracted_at)."
+        columns:
+          - name: id
+            description: "UUID employé depuis Spring Boot JPA"
+          - name: first_name
+            description: "Prénom (non nettoyé — peut contenir des espaces)"
+          - name: last_name
+            description: "Nom de famille"
+          - name: email
+            description: "Email professionnel — identifiant unique dans le système source"
+          - name: hire_date
+            description: "Date d'embauche — clé de jointure vers dim_temps"
+          - name: contract_type
+            description: "Type de contrat : CDI, CDD, STAGE, FREELANCE, ALTERNANCE"
+          - name: department_id
+            description: "UUID du département — FK vers stg_departments.id"
+          - name: position_id
+            description: "UUID du poste — FK vers stg_positions.id"
+
+      - name: stg_departments
+        description: "Départements bruts depuis sirh_employee. 8 départements de l'entreprise."
+        columns:
+          - name: id
+            description: "UUID département"
+          - name: name
+            description: "Nom du département (non nettoyé)"
+
+      - name: stg_positions
+        description: "Postes bruts depuis sirh_employee. 34 intitulés de postes."
+        columns:
+          - name: id
+            description: "UUID poste"
+          - name: title
+            description: "Intitulé du poste"
+
+      - name: stg_skills
+        description: "Compétences brutes depuis sirh_recruitment. 20 compétences techniques."
+        columns:
+          - name: id
+            description: "UUID compétence"
+          - name: name
+            description: "Nom de la compétence (Python, Docker, SQL...)"
+
+      - name: stg_job_offers
+        description: "Offres d'emploi brutes depuis sirh_recruitment. 200+ offres publiées."
+        columns:
+          - name: id
+            description: "UUID offre"
+          - name: title
+            description: "Intitulé du poste recherché"
+          - name: department
+            description: "Département recruteur (texte libre — join par nom avec dim_departement)"
+          - name: status
+            description: "Statut : DRAFT, PENDING_VALIDATION, PUBLISHED, CLOSED, CANCELLED"
+          - name: published_date
+            description: "Date de publication — clé de jointure vers dim_temps"
+          - name: deadline_date
+            description: "Date limite de candidature"
+
+      - name: stg_applications
+        description: "Candidatures brutes depuis sirh_recruitment. 800 candidatures."
+        columns:
+          - name: id
+            description: "UUID candidature"
+          - name: applicant_email
+            description: "Email du candidat"
+          - name: applied_date
+            description: "Date de dépôt — clé de jointure vers dim_temps"
+          - name: job_offer_id
+            description: "UUID offre associée — FK vers stg_job_offers.id"
+          - name: status
+            description: "Statut pipeline : PENDING, REVIEWING, INTERVIEW_SCHEDULED, ACCEPTED, REJECTED"
+          - name: match_score
+            description: "Score IA de correspondance (0-100)"
+
+      - name: stg_application_skills
+        description: >
+          Table de liaison compétences × candidatures. Clé de lecture pour fait_competences.
+          Permet d'analyser quelles compétences les candidats possèdent par rapport aux offres.
+        columns:
+          - name: application_id
+            description: "UUID candidature — FK vers stg_applications.id"
+          - name: skill_id
+            description: "UUID compétence — FK vers stg_skills.id"

@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+
+  # ── Base de données ──────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: sirh-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sirh_auth
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ── Auth Service ─────────────────────────────────────────────
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: sirh-auth
+    ports:
+      - "9081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/sirh_auth?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: "a-very-long-random-secret-key-that-is-at-least-256-bits-long-abc123"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # ── Employee Service ─────────────────────────────────────────
+  employee-service:
+    build:
+      context: .
+      dockerfile: employee-service/Dockerfile
+    container_name: sirh-employee
+    ports:
+      - "9082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/sirh_employee?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: "a-very-long-random-secret-key-that-is-at-least-256-bits-long-abc123"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # ── Recruitment Service ──────────────────────────────────────
+  recruitment-service:
+    build:
+      context: .
+      dockerfile: recruitment-service/Dockerfile
+    container_name: sirh-recruitment
+    ports:
+      - "9083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/sirh_recruitment?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: "a-very-long-random-secret-key-that-is-at-least-256-bits-long-abc123"
+      GEMINI_API_KEY: ""
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # ── API Gateway ──────────────────────────────────────────────
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: sirh-gateway
+    ports:
+      - "9080:8080"
+    environment:
+      JWT_SECRET: "a-very-long-random-secret-key-that-is-at-least-256-bits-long-abc123"
+      AUTH_SERVICE_URL: http://auth-service:8081
+      EMPLOYEE_SERVICE_URL: http://employee-service:8082
+      RECRUITMENT_SERVICE_URL: http://recruitment-service:8083
+    depends_on:
+      - auth-service
+      - employee-service
+      - recruitment-service
+
+volumes:
+  mysql_data:

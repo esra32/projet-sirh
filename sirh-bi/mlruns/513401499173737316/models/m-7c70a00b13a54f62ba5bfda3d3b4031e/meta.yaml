@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/models/m-7c70a00b13a54f62ba5bfda3d3b4031e/artifacts
+creation_timestamp: 1780843999654
+experiment_id: '513401499173737316'
+last_updated_timestamp: 1780844003038
+model_id: m-7c70a00b13a54f62ba5bfda3d3b4031e
+model_type: null
+name: random_forest_turnover
+source_run_id: 4a66a2cb6dd14c778d2b87fd68268d0d
+status: 2
+status_message: null

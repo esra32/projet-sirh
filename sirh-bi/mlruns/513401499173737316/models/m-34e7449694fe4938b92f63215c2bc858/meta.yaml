@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/models/m-34e7449694fe4938b92f63215c2bc858/artifacts
+creation_timestamp: 1782328954970
+experiment_id: '513401499173737316'
+last_updated_timestamp: 1782328961702
+model_id: m-34e7449694fe4938b92f63215c2bc858
+model_type: null
+name: model_rf_v4_balanced
+source_run_id: 0387498b23bb40e783a66af08db89c49
+status: 2
+status_message: null

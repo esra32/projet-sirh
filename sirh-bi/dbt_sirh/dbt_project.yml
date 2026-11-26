@@ -1,0 +1,26 @@
+name: 'sirh_dbt'
+version: '1.0.0'
+config-version: 2
+
+profile: 'sirh_dbt'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  sirh_dbt:
+    staging:
+      +materialized: view
+      +tags: ['staging']
+    dimensions:
+      +materialized: table
+      +tags: ['dimension']
+    faits:
+      +materialized: table
+      +tags: ['fait']
+    reporting:
+      +materialized: table
+      +tags: ['reporting']

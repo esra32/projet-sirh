@@ -1,0 +1,51 @@
+version: '3.8'
+
+# =============================================================================
+# Apache Superset — Dashboards SIRH BI
+# =============================================================================
+# Visualisation du Data Warehouse sirh_dwh
+#
+# Démarrage :
+#   docker compose -f docker-compose.superset.yml up -d
+#   Attendre 2-3 minutes (initialisation)
+#   Ouvrir http://localhost:8088
+#   Login : admin / admin
+#
+# Arrêt :
+#   docker compose -f docker-compose.superset.yml down
+# =============================================================================
+
+services:
+  superset:
+    image: apache/superset:3.1.3
+    container_name: superset-sirh
+    ports:
+      - "8088:8088"
+    environment:
+      # Clé secrète pour les sessions
+      SUPERSET_SECRET_KEY: "sirh_superset_secret_key_2026"
+
+      # Admin par défaut
+      SUPERSET_ADMIN_USERNAME: admin
+      SUPERSET_ADMIN_PASSWORD: admin
+      SUPERSET_ADMIN_EMAIL: admin@sirh.com
+      SUPERSET_ADMIN_FIRSTNAME: Admin
+      SUPERSET_ADMIN_LASTNAME: SIRH
+
+    volumes:
+      - superset_home:/app/superset_home
+      - ./superset_config.py:/app/pythonpath/superset_config.py
+
+    command: >
+      bash -c "
+        pip install pymysql cryptography &&
+        superset db upgrade &&
+        superset fab create-admin --username admin --firstname Admin --lastname SIRH --email admin@sirh.com --password admin || true &&
+        superset init &&
+        superset run -h 0.0.0.0 -p 8088 --with-threads --reload
+      "
+
+    restart: unless-stopped
+
+volumes:
+  superset_home:

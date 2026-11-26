@@ -1,0 +1,112 @@
+version: 2
+
+sources:
+  - name: sirh_employee
+    description: "Base operationnelle RH employee utilisee pour les analyses turnover."
+    schema: sirh_employee
+    tables:
+      - name: employees
+        description: "Employes bruts avec les informations de depart."
+        columns:
+          - name: id
+            description: "Identifiant de l'employe"
+          - name: first_name
+            description: "Prenom de l'employe"
+          - name: last_name
+            description: "Nom de l'employe"
+          - name: department_id
+            description: "Identifiant du departement"
+          - name: position_id
+            description: "Identifiant du poste"
+          - name: manager_id
+            description: "Identifiant du manager"
+          - name: date_depart
+            description: "Date de depart de l'employe, si applicable"
+          - name: motif_depart
+            description: "Motif de depart de l'employe"
+      - name: departments
+        description: "Departements de la base operationnelle RH employee."
+        columns:
+          - name: id
+            description: "Identifiant du departement"
+          - name: name
+            description: "Nom du departement"
+
+models:
+  - name: rh_turnover_departement
+    description: >
+      Reporting du turnover par departement, base sur les employes de la base
+      operationnelle sirh_employee.
+    columns:
+      - name: departement
+        description: "Nom du departement"
+        tests:
+          - not_null
+      - name: total_employes
+        description: "Nombre total d'employes du departement"
+        tests:
+          - not_null
+      - name: nb_departs
+        description: "Nombre d'employes ayant une date de depart"
+      - name: taux_turnover
+        description: "Pourcentage d'employes partis dans le departement"
+      - name: nb_demissions
+        description: "Nombre de departs avec motif DEMISSION"
+      - name: nb_licenciements
+        description: "Nombre de departs avec motif LICENCIEMENT"
+      - name: nb_retraites
+        description: "Nombre de departs avec motif RETRAITE"
+
+  - name: rh_evolution_effectifs
+    description: >
+      Reporting de l'evolution mensuelle des effectifs et des embauches par
+      departement et type de contrat.
+    columns:
+      - name: departement
+        description: "Nom du departement"
+        tests:
+          - not_null
+      - name: annee
+        description: "Annee du snapshot mensuel"
+        tests:
+          - not_null
+      - name: mois
+        description: "Mois du snapshot mensuel"
+        tests:
+          - not_null
+      - name: date_mois
+        description: "Date representant le premier jour du mois du snapshot"
+      - name: nom_mois
+        description: "Nom du mois"
+      - name: type_contrat
+        description: "Type de contrat"
+      - name: nb_embauches
+        description: "Nombre d'embauches du mois"
+      - name: effectif
+        description: "Effectif cumule du departement sans doublon"
+      - name: taux_croissance
+        description: "Taux de croissance moyen du mois"
+
+  - name: rh_hierarchie_managers
+    description: >
+      Reporting de la hierarchie managers depuis la base operationnelle
+      sirh_employee, limite aux managers ayant au moins cinq subordonnes.
+    columns:
+      - name: manager_id
+        description: "Identifiant du manager"
+        tests:
+          - not_null
+      - name: manager_nom
+        description: "Nom complet du manager"
+      - name: departement
+        description: "Departement du manager"
+      - name: nb_subordonnes
+        description: "Nombre de subordonnes directs"
+      - name: categorie_manager
+        description: "Categorie du manager selon la taille de son equipe: manager operationnel, management intermediaire ou top management"
+      - name: nb_postes_differents
+        description: "Nombre de postes differents dans l'equipe"
+      - name: nb_departs_equipe
+        description: "Nombre de departs dans l'equipe"
+      - name: taux_turnover_equipe
+        description: "Taux de turnover de l'equipe en pourcentage"

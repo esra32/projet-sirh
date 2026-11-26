@@ -1,0 +1,195 @@
+<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram id="sirh-arch" name="Architecture SIRH">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== TITRE BACKEND ===== -->
+        <mxCell id="t1" value="Application SIRH (Backend + Frontend)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=16;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="80" y="10" width="960" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ===== FRONTEND ===== -->
+        <mxCell id="fe" value="&lt;b&gt;Frontend&lt;/b&gt;&lt;br/&gt;Angular 17+ · TypeScript&lt;br/&gt;CSS Custom · chart.js · ng2-charts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="480" y="55" width="300" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ===== API GATEWAY ===== -->
+        <mxCell id="gw" value="&lt;b&gt;API Gateway&lt;/b&gt;&lt;br/&gt;Spring Cloud Gateway · port 8080&lt;br/&gt;JWT Auth Filter · CORS · Routing · Swagger/OpenAPI 3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="410" y="205" width="440" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ===== KEYCLOAK SERVER ===== -->
+        <mxCell id="kc" value="&lt;b&gt;Keycloak 26&lt;/b&gt; · port 8084&lt;br/&gt;Identity Provider · SSO&lt;br/&gt;Realm : myrealm · JWKS · Token Exchange" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="205" width="250" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ===== AUTH SERVICE ===== -->
+        <mxCell id="s1" value="&lt;b&gt;Auth Service&lt;/b&gt;&lt;br/&gt;Spring Security · JWT&lt;br/&gt;Login / Register / Rôles&lt;br/&gt;port 8081" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="110" y="385" width="210" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ===== EMPLOYEE SERVICE ===== -->
+        <mxCell id="s2" value="&lt;b&gt;Employee Service&lt;/b&gt;&lt;br/&gt;Employés · Départements&lt;br/&gt;Postes · Mobilité · Org Chart&lt;br/&gt;port 8082" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="385" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ===== RECRUITMENT SERVICE ===== -->
+        <mxCell id="s3" value="&lt;b&gt;Recruitment Service&lt;/b&gt;&lt;br/&gt;Offres · Candidatures · Skills&lt;br/&gt;Chat IA · Market Intelligence&lt;br/&gt;port 8083" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="740" y="385" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ===== APIS EXTERNES ===== -->
+        <mxCell id="ext" value="&lt;b&gt;APIs Externes&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;verticalAlign=top;arcSize=5;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="700" y="495" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ext1" value="&lt;b&gt;Gemini AI (Google)&lt;/b&gt;&lt;br/&gt;gemini-1.5-flash · Chat ARIA · Market Intel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="710" y="515" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ext2" value="&lt;b&gt;Adzuna API&lt;/b&gt;&lt;br/&gt;Marché de l'emploi · Market Intelligence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="855" y="515" width="135" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ===== MYSQL CONTAINER ===== -->
+        <mxCell id="db0" value="&lt;b&gt;MySQL 8.0&lt;/b&gt; — 1 container Docker (port 3307) — 3 schemas indépendants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;verticalAlign=top;arcSize=5;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="80" y="590" width="920" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- DB sirh_auth -->
+        <mxCell id="db1" value="&lt;b&gt;sirh_auth&lt;/b&gt;&lt;br/&gt;users · roles&lt;br/&gt;refresh_tokens" style="shape=mxgraph.flowchart.database;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="120" y="618" width="180" height="78" as="geometry" />
+        </mxCell>
+
+        <!-- DB sirh_employee -->
+        <mxCell id="db2" value="&lt;b&gt;sirh_employee&lt;/b&gt;&lt;br/&gt;employees · departments&lt;br/&gt;positions · mobility" style="shape=mxgraph.flowchart.database;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="618" width="200" height="78" as="geometry" />
+        </mxCell>
+
+        <!-- DB sirh_recruitment -->
+        <mxCell id="db3" value="&lt;b&gt;sirh_recruitment&lt;/b&gt;&lt;br/&gt;job_offers · applications&lt;br/&gt;skills · notifications" style="shape=mxgraph.flowchart.database;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="618" width="200" height="78" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ARROWS BACKEND ===== -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="fe" target="gw" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="gw" target="s1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="gw" target="s2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="gw" target="s3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="s1" target="db1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="s2" target="db2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="s3" target="db3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <!-- Recruitment → APIs externes -->
+        <mxCell id="eext" value="appels API" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;fontSize=9;" edge="1" source="s3" target="ext" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <!-- Frontend → BI tools (liens directs menu RH Admin) -->
+        <mxCell id="efbi" value="&lt;i&gt;accès direct BI (menu RH Admin)&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" source="fe" target="bic" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <!-- Keycloak arrows -->
+        <mxCell id="ek1" value="SSO / keycloak-js" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;fontSize=9;" edge="1" source="fe" target="kc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ek2" value="JWKS validation" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;fontSize=9;" edge="1" source="gw" target="kc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ek3" value="token exchange / register" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;fontSize=9;" edge="1" source="s1" target="kc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== SEPARATEUR VERTICAL ===== -->
+        <mxCell id="sep" value="" style="line;strokeColor=#999999;strokeWidth=2;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="10" width="10" height="860" as="geometry" />
+        </mxCell>
+
+        <!-- ===== TITRE BI ===== -->
+        <mxCell id="t2" value="Couche BI / Analytique (sirh-bi)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=16;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="10" width="560" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ===== BI CONTAINER ===== -->
+        <mxCell id="bic" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#f9a825;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="55" width="560" height="820" as="geometry" />
+        </mxCell>
+
+        <!-- AIRFLOW -->
+        <mxCell id="bi0" value="&lt;b&gt;Apache Airflow&lt;/b&gt; · port 8085 (Docker)&lt;br/&gt;DAG : sirh_bi_pipeline — Orchestration complète de la couche BI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="80" width="480" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- EXTRACT / STAGING -->
+        <mxCell id="bi1" value="&lt;b&gt;Extract / Staging&lt;/b&gt;&lt;br/&gt;extract_staging.py&lt;br/&gt;sirh_employee · sirh_auth · sirh_recruitment → sirh_staging (MySQL)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="190" width="480" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- QUALITE DONNEES -->
+        <mxCell id="bi_ge" value="&lt;b&gt;Qualité des Données&lt;/b&gt;&lt;br/&gt;Python pandas/pymysql · 92 tests dbt&lt;br/&gt;data_quality_report.py — Validation avant chargement DWH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0ff;strokeColor=#6666cc;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="282" width="480" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- DBT / DWH -->
+        <mxCell id="bi2" value="&lt;b&gt;dbt (dbt_sirh)&lt;/b&gt;&lt;br/&gt;dim_employe · fait_recrutement · fait_mobilite · kpi_rh&lt;br/&gt;Snapshots SCD Type 2 · Tests (92) · dbt docs (port 8086)&lt;br/&gt;→ sirh_dwh (Data Warehouse MySQL)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="365" width="480" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- ML MODELS -->
+        <mxCell id="bi3" value="&lt;b&gt;ML Models — 6 modèles Python (scikit-learn · Prophet · SHAP)&lt;/b&gt;&lt;br/&gt;ML-1 Turnover · RandomForest · AUC 0.757&lt;br/&gt;ML-2 Segmentation · K-Means | ML-3 High Potentials&lt;br/&gt;ML-4 Forecast · Prophet | ML-5 Corrélations · Pearson&lt;br/&gt;ML-6 Rétention des talents → tables ml_* dans sirh_dwh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="478" width="480" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- SUPERSET -->
+        <mxCell id="bi4" value="&lt;b&gt;Apache Superset&lt;/b&gt; · port 8088 (Docker)&lt;br/&gt;Dashboards RH interactifs · KPIs · Visualisations&lt;br/&gt;Source : sirh_dwh + tables ml_*&lt;br/&gt;Row-Level Security (RLS) — données filtrées par rôle (EMPLOYEE / MANAGER / HR_ADMIN)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="606" width="480" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- MLFLOW -->
+        <mxCell id="bi5" value="&lt;b&gt;MLflow&lt;/b&gt; · port 5000 · Tracking des expériences ML&lt;br/&gt;Paramètres · Métriques AUC · Modèles enregistrés (mlruns/ · mlflow.db)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="718" width="480" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- GOUVERNANCE BI -->
+        <mxCell id="bi6" value="&lt;b&gt;Gouvernance &amp; Administration BI&lt;/b&gt;&lt;br/&gt;Catalogue métriques (catalog.json) · Documentation dbt (port 8086) · Planification Airflow&lt;br/&gt;Gestion des accès Superset · Row-Level Security · Audit des données" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0ff;strokeColor=#6666cc;fontSize=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="796" width="480" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ARROWS BI PIPELINE ===== -->
+        <mxCell id="be1" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="bi1" target="bi_ge" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be2" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="bi_ge" target="bi2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be3" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="bi2" target="bi3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be4" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="bi3" target="bi4" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be5" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" source="bi3" target="bi5" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be6" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="bi4" target="bi6" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be7" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" source="bi5" target="bi6" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== ARROW MySQL -> BI Extract ===== -->
+        <mxCell id="conn" value="&lt;i&gt;données opérationnelles&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="db0" target="bi1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LEGENDE ===== -->
+        <mxCell id="l0" value="&lt;b&gt;Légende&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="760" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" value="Frontend / Microservice" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="80" y="790" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" value="API Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="260" y="790" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" value="Base de données" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="390" y="790" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" value="ETL / dbt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="530" y="790" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l5" value="ML Models" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="650" y="790" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l6" value="Superset / Dashboards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="770" y="790" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l7" value="Gouvernance / Qualité" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0ff;strokeColor=#6666cc;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="80" y="830" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l8" value="Keycloak / Identity Provider" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="830" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l9" value="APIs Externes (Gemini / Adzuna)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="460" y="830" width="220" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

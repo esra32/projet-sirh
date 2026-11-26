@@ -1,0 +1,163 @@
+name: SIRH CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+# Cancel in-progress runs on new push to same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ----------------------------------------------------------
+  # Backend – Spring Boot (Maven multi-modules)
+  # ----------------------------------------------------------
+  backend:
+    name: Backend (Java ${{ matrix.java }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java: [21]
+
+    defaults:
+      run:
+        working-directory: sirh-backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: temurin
+          cache: maven
+
+      # ── Auth Service ──────────────────────────────────────
+      - name: Build & test auth-service
+        run: mvn -pl auth-service -am clean verify -B -q
+
+      # ── Employee Service ──────────────────────────────────
+      - name: Build & test employee-service
+        run: mvn -pl employee-service -am clean verify -B -q
+
+      # ── Recruitment Service ───────────────────────────────
+      - name: Build & test recruitment-service
+        run: mvn -pl recruitment-service -am clean verify -B -q
+
+      # ── API Gateway ───────────────────────────────────────
+      - name: Build api-gateway
+        run: mvn -pl api-gateway -am clean package -DskipTests -B -q
+
+      # ── Full parent build ─────────────────────────────────
+      - name: Full parent build (package)
+        run: mvn clean package -DskipTests -B -q
+
+      # ── Upload test reports ───────────────────────────────
+      - name: Upload surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-reports-java${{ matrix.java }}
+          path: sirh-backend/**/target/surefire-reports/*.xml
+          retention-days: 14
+
+  # ----------------------------------------------------------
+  # Frontend – Angular 17
+  # ----------------------------------------------------------
+  frontend:
+    name: Frontend (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: [20]
+
+    defaults:
+      run:
+        working-directory: sirh-frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: sirh-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Lint (ESLint)
+        run: npx ng lint --no-progress || true    # advisory, not blocking
+
+      - name: Build (production)
+        run: npx ng build --configuration production
+
+      - name: Unit tests (headless)
+        run: >
+          npx ng test
+          --no-progress
+          --browsers ChromeHeadless
+          --watch false
+          --code-coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage-node${{ matrix.node }}
+          path: sirh-frontend/coverage/
+          retention-days: 14
+
+  # ----------------------------------------------------------
+  # E2E – Cypress (runs only on push to main)
+  # ----------------------------------------------------------
+  e2e:
+    name: E2E (Cypress)
+    runs-on: ubuntu-latest
+    needs: [frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    defaults:
+      run:
+        working-directory: sirh-frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: sirh-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Start dev server (background)
+        run: npx ng serve --configuration development &
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:4200 --timeout 60000
+
+      - name: Run Cypress E2E
+        run: npx cypress run --headless
+
+      - name: Upload Cypress screenshots (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: sirh-frontend/cypress/screenshots/
+          retention-days: 7

@@ -1,0 +1,12 @@
+sirh_dbt:
+  target: docker
+  outputs:
+    docker:
+      type: mysql
+      server: host.docker.internal
+      port: 3306
+      database: sirh_dwh
+      schema: sirh_dwh
+      username: root
+      password: root
+      threads: 1

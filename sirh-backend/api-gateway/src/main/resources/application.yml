@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials Access-Control-Allow-Methods Access-Control-Allow-Headers, RETAIN_UNIQUE
+      routes:
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/auth/**
+        - id: employee-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/employees,/api/employees/**,/api/departments,/api/departments/**,/api/positions,/api/positions/**,/api/services,/api/services/**,/api/orgchart,/api/orgchart/**,/api/mobility,/api/mobility/**
+          filters:
+            - AuthJwtFilter
+        - id: recruitment-public
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/applications/public,/api/applications/public/offers
+        - id: recruitment-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/job-offers,/api/job-offers/**,/api/applications,/api/applications/**,/api/skills,/api/skills/**,/api/notifications,/api/notifications/**
+          filters:
+            - AuthJwtFilter
+        - id: chat-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/chat,/api/chat/**
+          filters:
+            - AuthJwtFilter
+        - id: market-intelligence
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/market,/api/market/**
+          filters:
+            - AuthJwtFilter
+
+server:
+  port: 8080
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:change-me-to-a-very-long-secret-key-min-256-bits}
+
+keycloak:
+  # Example:
+  # jwks-uri: http://localhost:8080/realms/<realm>/protocol/openid-connect/certs
+  # issuer: http://localhost:8080/realms/<realm>
+  jwks-uri: ${KEYCLOAK_JWKS_URI:http://localhost:8084/realms/myrealm/protocol/openid-connect/certs}
+  issuer: ${KEYCLOAK_ISSUER:http://localhost:8084/realms/myrealm}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: auth-service
+        url: /v3/api-docs/auth
+      - name: employee-service
+        url: /v3/api-docs/employee
+      - name: recruitment-service
+        url: /v3/api-docs/recruitment
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

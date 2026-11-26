@@ -1,0 +1,80 @@
+<div class="ai-chat-container">
+  <!-- Bouton flottant -->
+  <div class="chat-toggle-btn" [class.active]="isOpen" (click)="toggleChat()">
+    <span class="icon" *ngIf="!isOpen">✨</span>
+    <span class="icon" *ngIf="isOpen">✕</span>
+    <span class="badge-dot" *ngIf="!isOpen"></span>
+  </div>
+
+  <!-- Fenêtre de chat -->
+  <div class="chat-window" *ngIf="isOpen" [@slideInOut]>
+
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="header-avatar">🤖</div>
+      <div class="header-info">
+        <h3>ARIA</h3>
+        <div class="header-subline">
+          <span class="status-dot"></span>
+          <span>Assistant RH · En ligne</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" title="Réinitialiser la conversation" (click)="resetConversation()">🔄</button>
+        <button class="icon-btn close" (click)="toggleChat()">✕</button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" #scrollMe>
+
+      <!-- Quick suggestions (only at start) -->
+      <div class="suggestions-row" *ngIf="showSuggestions && messages.length <= 1">
+        <p class="suggestions-label">Suggestions rapides :</p>
+        <button
+          *ngFor="let s of quickSuggestions"
+          class="suggestion-chip"
+          (click)="useSuggestion(s)">
+          {{ s }}
+        </button>
+      </div>
+
+      <!-- Messages -->
+      <div
+        *ngFor="let msg of messages"
+        class="message-bubble"
+        [ngClass]="msg.sender"
+        [@fadeIn]>
+        <div class="message-content" [innerHTML]="formatMessage(msg.text)"></div>
+        <div class="message-time">{{ msg.timestamp | date:'HH:mm' }}</div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="message-bubble ai typing" *ngIf="isTyping" [@fadeIn]>
+        <div class="dot-typing"></div>
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input-area">
+      <input
+        type="text"
+        [(ngModel)]="newMessage"
+        (keyup.enter)="sendMessage()"
+        placeholder="Posez votre question RH..."
+        [disabled]="isTyping"
+        class="chat-input"
+      />
+      <button
+        class="send-btn"
+        (click)="sendMessage()"
+        [disabled]="isTyping || !newMessage.trim()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</div>

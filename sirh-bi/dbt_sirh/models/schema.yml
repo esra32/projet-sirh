@@ -1,0 +1,457 @@
+version: 2
+
+models:
+
+  - name: dim_temps
+    description: >
+      Dimension temps principale du Data Warehouse RH pour les filtres Superset
+      par annee, trimestre, mois et annee_mois.
+    columns:
+      - name: id_temps_sk
+        description: "Cle surrogate au format YYYYMMDD"
+        tests:
+          - not_null
+          - unique
+      - name: date_jour
+        description: "Date calendaire"
+        tests:
+          - not_null
+          - unique
+      - name: annee
+        description: "Annee calendaire"
+        tests:
+          - not_null
+      - name: trimestre
+        description: "Trimestre numerique de 1 a 4"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4]
+      - name: mois
+        description: "Mois numerique de 1 a 12"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      - name: annee_mois
+        description: "Periode mensuelle numerique au format YYYYMM"
+        tests:
+          - not_null
+
+  - name: stg_employees
+    description: >
+      Modèle de staging des employés. Nettoie et standardise les données brutes
+      depuis sirh_staging.stg_employees. Calcule l'ancienneté en jours et en mois,
+      normalise les emails en minuscules, et filtre les enregistrements invalides.
+      Alimente dim_employe et fait_effectifs.
+    columns:
+      - name: employee_nk
+        description: "Clé naturelle UUID de l'employé depuis le système source sirh_employee"
+        tests:
+          - not_null
+          - unique
+      - name: email
+        description: "Email normalisé en minuscules — identifiant de connexion au SIRH"
+        tests:
+          - not_null
+          - unique
+      - name: type_contrat
+        description: "Type de contrat : CDI, CDD, STAGE, FREELANCE, ALTERNANCE"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['CDI', 'CDD', 'STAGE', 'FREELANCE', 'ALTERNANCE']
+      - name: anciennete_jours
+        description: "Ancienneté calculée : DATEDIFF(CURDATE(), hire_date)"
+        tests:
+          - not_null
+
+  - name: stg_applications
+    description: >
+      Modèle de staging des candidatures. Calcule les colonnes dérivées métier :
+      categorie_score (EXCELLENT/BON/MOYEN/FAIBLE), est_accepte, a_passe_entretien.
+      Alimente fait_recrutement. Tests métier : date_candidature pas dans le futur,
+      match_score entre 0 et 100.
+    columns:
+      - name: application_nk
+        description: "Clé naturelle UUID de la candidature"
+        tests:
+          - not_null
+          - unique
+      - name: match_score
+        description: "Score IA de correspondance candidat/offre (0-100)"
+        tests:
+          - not_null
+      - name: statut
+        description: "Statut dans le pipeline : PENDING, REVIEWING, INTERVIEW_SCHEDULED, ACCEPTED, REJECTED"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['PENDING', 'REVIEWING', 'INTERVIEW_SCHEDULED', 'ACCEPTED', 'REJECTED']
+      - name: date_candidature
+        description: "Date de dépôt de la candidature — ne doit pas être dans le futur"
+      - name: categorie_score
+        description: "Catégorie calculée : EXCELLENT (>=80), BON (>=60), MOYEN (>=40), FAIBLE (<40)"
+        tests:
+          - accepted_values:
+              values: ['EXCELLENT', 'BON', 'MOYEN', 'FAIBLE']
+      - name: est_accepte
+        description: "1 si candidature acceptée, 0 sinon"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: a_passe_entretien
+        description: "1 si entretien réalisé, 0 sinon"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+
+  - name: stg_job_offers
+    description: >
+      Modèle de staging des offres d'emploi. Calcule la durée de l'offre en jours.
+      Alimente dim_offre et fait_recrutement.
+    columns:
+      - name: offer_nk
+        description: "Clé naturelle UUID de l'offre d'emploi"
+        tests:
+          - not_null
+          - unique
+      - name: statut
+        description: "Statut : DRAFT, PENDING_VALIDATION, PUBLISHED, CLOSED, CANCELLED"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['DRAFT', 'PENDING_VALIDATION', 'PUBLISHED', 'CLOSED', 'CANCELLED']
+
+  - name: stg_departments
+    description: "Staging départements nettoyé depuis sirh_staging. Alimente dim_departement et dim_employe."
+    columns:
+      - name: department_nk
+        description: "Clé naturelle UUID du département"
+        tests:
+          - not_null
+          - unique
+      - name: nom
+        description: "Nom du département"
+        tests:
+          - not_null
+
+  - name: stg_positions
+    description: "Staging postes nettoyé depuis sirh_staging. Alimente dim_poste et dim_employe."
+    columns:
+      - name: position_nk
+        description: "Clé naturelle UUID du poste"
+        tests:
+          - not_null
+          - unique
+      - name: titre
+        description: "Intitulé du poste"
+        tests:
+          - not_null
+
+  - name: stg_skills
+    description: "Staging compétences depuis sirh_staging. Alimente dim_competence."
+    columns:
+      - name: skill_nk
+        description: "Clé naturelle UUID de la compétence"
+        tests:
+          - not_null
+          - unique
+      - name: nom
+        description: "Nom de la compétence"
+        tests:
+          - not_null
+
+  - name: dim_employe
+    description: >
+      Dimension Employé avec SCD Type 2 simulé. 1500 employés actifs avec
+      attributs RH complets. est_actuel=TRUE indique la version courante.
+      Alimente fait_effectifs.
+    columns:
+      - name: id_employe_nk
+        description: "Clé naturelle UUID de l'employé depuis le système source"
+        tests:
+          - not_null
+      - name: email
+        description: "Email professionnel de l'employé"
+        tests:
+          - not_null
+      - name: type_contrat
+        description: "Type de contrat : CDI, CDD, STAGE, FREELANCE, ALTERNANCE"
+      - name: departement
+        description: "Nom du département de rattachement"
+      - name: poste
+        description: "Intitulé du poste occupé"
+      - name: anciennete_jours
+        description: "Ancienneté calculée en jours à la date d'extraction"
+      - name: est_actuel
+        description: "TRUE si enregistrement courant (SCD Type 2)"
+      - name: version
+        description: "Numéro de version SCD Type 2 — commence à 1"
+
+  - name: dim_departement
+    description: >
+      Dimension Département. Référentiel des 8 départements de l'entreprise.
+      Axe d'analyse principal des tableaux de bord RH.
+    columns:
+      - name: id_departement_nk
+        description: "Clé naturelle UUID du département depuis sirh_employee"
+        tests:
+          - not_null
+          - unique
+      - name: nom
+        description: "Nom du département (Informatique, Data & Analytics, RH, Marketing...)"
+
+  - name: dim_poste
+    description: >
+      Dimension Poste. Référentiel des 34 postes définis dans le SIRH.
+      Analyse la répartition des effectifs par type de poste.
+    columns:
+      - name: id_poste_nk
+        description: "Clé naturelle UUID du poste depuis sirh_employee"
+        tests:
+          - not_null
+          - unique
+      - name: titre
+        description: "Intitulé du poste (Data Engineer, DevOps Engineer, Architecte Solution...)"
+
+  - name: dim_competence
+    description: >
+      Dimension Compétence. 20 compétences techniques et fonctionnelles.
+      Top : Python (214 employés), Docker (122), SQL (111), Git (77).
+      Alimente fait_competences.
+    columns:
+      - name: id_competence_nk
+        description: "Clé naturelle UUID de la compétence"
+        tests:
+          - not_null
+          - unique
+      - name: nom
+        description: "Nom de la compétence (Python, Docker, SQL, Git, Kubernetes, Terraform...)"
+        tests:
+          - not_null
+
+  - name: dim_offre
+    description: >
+      Dimension Offre d'emploi. 354 offres publiées par le SIRH.
+      Analyse les tendances de recrutement par département et par période.
+      Alimente fait_recrutement et fait_competences.
+    columns:
+      - name: id_offre_nk
+        description: "Clé naturelle UUID de l'offre"
+        tests:
+          - not_null
+          - unique
+      - name: titre
+        description: "Intitulé du poste recherché"
+      - name: departement
+        description: "Département recruteur"
+      - name: duree_offre_jours
+        description: "Durée entre publication et deadline — KPI délai recrutement"
+
+  - name: fait_recrutement
+    description: >
+      Table de faits Recrutement. Granularité : 1 ligne par candidature (800 lignes).
+      Analyse le pipeline de recrutement : taux d'acceptation, distribution des
+      scores IA, entonnoir PENDING → REVIEWING → INTERVIEW → ACCEPTED.
+      Mesure principale : match_score (score IA 0-100).
+    columns:
+      - name: id_temps_depot
+        description: "Cle temporelle de depot de candidature"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_temps')
+              field: id_temps_sk
+      - name: annee
+        description: "Annee de depot de candidature"
+        tests:
+          - not_null
+      - name: trimestre
+        description: "Trimestre de depot de candidature"
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4]
+      - name: mois
+        description: "Mois de depot de candidature"
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      - name: annee_mois
+        description: "Periode mensuelle de depot au format YYYYMM"
+      - name: id_candidature_nk
+        description: "Clé naturelle UUID de la candidature — clé de dégénérescence"
+        tests:
+          - not_null
+      - name: match_score
+        description: "Score IA de matching candidat/offre (0-100) — mesure principale"
+        tests:
+          - not_null
+      - name: categorie_score
+        description: "EXCELLENT (>=80), BON (>=60), MOYEN (>=40), FAIBLE (<40)"
+      - name: est_accepte
+        description: "1 si accepté — calcul du taux de conversion"
+      - name: a_passe_entretien
+        description: "1 si entretien réalisé — analyse de l'entonnoir recrutement"
+      - name: nb_competences_matchees
+        description: "Compétences candidat correspondant aux exigences de l'offre"
+      - name: type_recrutement
+        description: "Type de recrutement calculé à partir de la localisation de l'offre"
+
+  - name: fait_effectifs
+    description: >
+      Table de faits Effectifs. Granularité : 1 ligne par employé actif (1500 lignes).
+      Snapshot quotidien des effectifs. Analyse : répartition par département,
+      type de contrat, pyramide des anciennetés, évolution des embauches 2014-2026.
+    columns:
+      - name: id_temps_sk
+        description: "Cle temporelle de la date d'embauche"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_temps')
+              field: id_temps_sk
+      - name: annee
+        description: "Annee d'embauche"
+        tests:
+          - not_null
+      - name: trimestre
+        description: "Trimestre d'embauche"
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4]
+      - name: mois
+        description: "Mois d'embauche"
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      - name: annee_mois
+        description: "Periode mensuelle d'embauche au format YYYYMM"
+      - name: id_employe_nk
+        description: "Clé naturelle UUID de l'employé — clé de dégénérescence"
+        tests:
+          - not_null
+      - name: type_contrat
+        description: "CDI/CDD/STAGE/FREELANCE/ALTERNANCE — axe de répartition contractuelle"
+      - name: anciennete_jours
+        description: "Ancienneté en jours — pyramide des anciennetés"
+      - name: anciennete_mois
+        description: "Ancienneté en mois — KPIs d'ancienneté moyenne"
+
+  - name: fait_competences
+    description: >
+      Table de faits Compétences. Granularité : 1 ligne par compétence × offre.
+      Analyse les compétences les plus demandées dans les offres d'emploi
+      et le nombre de candidats possédant chaque compétence.
+      Connecte dim_competence au reste du pipeline de données.
+    columns:
+      - name: id_temps_sk
+        description: "Cle temporelle de premiere candidature observee"
+        tests:
+          - relationships:
+              to: ref('dim_temps')
+              field: id_temps_sk
+      - name: annee
+        description: "Annee de premiere candidature observee"
+      - name: trimestre
+        description: "Trimestre de premiere candidature observee"
+      - name: mois
+        description: "Mois de premiere candidature observee"
+      - name: annee_mois
+        description: "Periode mensuelle de premiere candidature observee"
+      - name: id_competence_nk
+        description: "Clé naturelle UUID de la compétence"
+        tests:
+          - not_null
+      - name: competence
+        description: "Nom de la compétence"
+      - name: categorie_competence
+        description: "Catégorie calculée de la compétence pour l'analyse BI"
+      - name: id_offre_nk
+        description: "Clé naturelle UUID de l'offre associée"
+      - name: titre_offre
+        description: "Intitulé de l'offre d'emploi"
+      - name: departement_offre
+        description: "Département recruteur de l'offre"
+      - name: departement_normalise
+        description: "Département recruteur normalisé pour l'analyse BI"
+      - name: nb_candidats
+        description: "Nombre de candidats réparti pour obtenir une distribution réaliste par compétence"
+      - name: nb_offres
+        description: "Nombre d'offres réparti pour obtenir une distribution réaliste par famille de compétence"
+
+  - name: fait_mobilite
+    description: >
+      Table de faits Mobilité — Periodic Snapshot Mensuel (pattern Kimball).
+      Granularité : 1 ligne par département × poste × type_contrat × année × mois.
+      DIFFÉRENT de fait_effectifs (Transaction Fact) : ce modèle est un Periodic Snapshot
+      qui capture l'évolution des effectifs mois par mois de 2014 à 2026.
+      Permet d'analyser les tendances de croissance, la saisonnalité des recrutements,
+      et le taux de croissance mensuel par département.
+      Utilise des window functions (SUM OVER PARTITION BY) pour l'effectif cumulé.
+    columns:
+      - name: id_temps_sk
+        description: "Clé temporelle — premier jour du mois représentant le snapshot mensuel"
+        tests:
+          - not_null
+      - name: id_departement_nk
+        description: "Clé naturelle UUID du département"
+      - name: id_poste_nk
+        description: "Clé naturelle UUID du poste"
+      - name: annee_snapshot
+        description: "Année du snapshot mensuel"
+        tests:
+          - not_null
+      - name: mois_snapshot
+        description: "Mois du snapshot (1-12)"
+        tests:
+          - not_null
+      - name: trimestre
+        description: "Trimestre (1-4)"
+      - name: libelle_trimestre
+        description: "T1, T2, T3 ou T4"
+      - name: type_contrat
+        description: "CDI, CDD, STAGE — répartition contractuelle par mois"
+      - name: nb_embauches_mois
+        description: "Nombre d'employés embauchés ce mois dans ce département/poste"
+      - name: effectif_cumule_dept
+        description: "Effectif total cumulé du département depuis 2014 — calculé par window function"
+      - name: taux_croissance_pct
+        description: "Taux de croissance mensuelle = nb_embauches / effectif_cumulé × 100"
+
+  - name: kpi_rh
+    description: >
+      Vue de reporting agrégée — KPIs RH par département.
+      Granularité : 1 ligne par département (8 lignes).
+      Consolide effectifs, mobilité et recrutement en une seule table analytique
+      pour alimenter les dashboards exécutifs et les tableaux de bord RH.
+    columns:
+      - name: departement
+        description: "Nom du département — axe d'analyse principal"
+        tests:
+          - not_null
+          - unique
+      - name: nb_employes
+        description: "Effectif total du département"
+      - name: nb_cdi
+        description: "Nombre d'employés en CDI"
+      - name: nb_cdd
+        description: "Nombre d'employés en CDD"
+      - name: nb_stage
+        description: "Nombre de stagiaires"
+      - name: anciennete_moy_mois
+        description: "Ancienneté moyenne en mois — indicateur de fidélisation"
+      - name: nb_mobilites
+        description: "Nombre de candidats internes recrutes"
+      - name: taux_mobilite_pct
+        description: "Taux de mobilité = candidats internes recrutes / effectif total × 100"
+      - name: nb_candidatures
+        description: "Nombre de candidatures reçues pour ce département"
+      - name: nb_acceptes
+        description: "Nombre de candidatures acceptées"
+      - name: taux_acceptation_pct
+        description: "Taux d'acceptation = acceptés / candidatures × 100"
+      - name: delai_moy_recrutement
+        description: "Délai moyen en jours entre candidature et today — proxy du temps de traitement"
+      - name: score_moy_candidatures
+        description: "Score IA moyen des candidatures reçues pour ce département"

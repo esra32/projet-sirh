@@ -1,0 +1,65 @@
+@startuml US07_consultation_employe
+scale 2
+title US07 — Consultation du Dossier Employé
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 14
+skinparam defaultFontName Arial
+skinparam sequenceArrowThickness 1.5
+skinparam ParticipantPadding 25
+skinparam LifelineStrategy solid
+
+skinparam sequence {
+    ArrowColor              #3F51B5
+    ActorBorderColor        #3F51B5
+    ActorBackgroundColor    #E8EAF6
+    ParticipantBorderColor  #3F51B5
+    ParticipantBackgroundColor #E8EAF6
+    LifeLineBorderColor     #BDBDBD
+    NoteBackgroundColor     #FFFDE7
+    NoteBorderColor         #FBC02D
+    GroupBackgroundColor    #EDE7F6
+    GroupBorderColor        #7E57C2
+    GroupHeaderFontColor    #4527A0
+}
+
+actor       "Administrateur RH"  as RH
+participant "Angular UI"         as Angular
+participant "Gateway (:8080)"    as Gateway
+participant "EmployeeController" as Ctrl
+participant "EmployeeService"    as Svc
+participant "EmployeeRepository" as Repo
+database    "MySQL"              as DB
+
+ref over RH, Angular, Gateway
+    Authentification préalable — JWT obtenu via Auth-Service
+end ref
+
+|||
+
+RH      ->  Angular  : 1. Sélectionner un employé dans la liste
+
+Angular ->  Gateway  : 2. GET /api/employees/{id}
+note right of Angular : Header: Authorization: Bearer JWT
+Gateway ->  Gateway  : 3. Valider le JWT (HS256)
+Gateway ->  Ctrl     : 4. GET /api/employees/{id}
+note right of Gateway : Headers injectés:\nX-Auth-User, X-Auth-Roles
+
+Ctrl    ->  Svc      : 5. findById(id)
+Svc     ->  Repo     : 6. findById(id)
+Repo    ->  DB       : 7. SELECT * FROM employee WHERE id = ?
+DB      --> Repo     : 8. Données de l'employé
+
+note right of Repo
+  Absent → ResourceNotFoundException
+  Gateway retourne 404 Not Found
+end note
+
+Repo    --> Svc      : 9. Employee entity
+Svc     ->  Svc      : 10. toDto(Employee)
+Svc     --> Ctrl     : 11. EmployeeDTO
+Ctrl    --> Gateway  : 12. 200 OK (JSON)
+Gateway --> Angular  : 12. 200 OK (JSON)
+Angular --> RH       : 13. Afficher les détails du profil
+
+@enduml

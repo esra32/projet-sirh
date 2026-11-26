@@ -1,0 +1,82 @@
+# ============================================================
+#  SIRH – Root .gitignore
+# ============================================================
+
+# -------- Java / Maven (backend) ----------------------------
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+!**/src/main/**/target/
+!**/src/test/**/target/
+!.mvn/wrapper/maven-wrapper.jar
+hs_err_pid*
+replay_pid*
+
+# -------- Node / Angular (frontend) -------------------------
+node_modules/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+/.angular/cache
+.sass-cache/
+/coverage
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# -------- IDEs and editors ----------------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sublime-workspace
+
+# -------- OS ------------------------------------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# -------- Environment / secrets -----------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.jks
+application-local.properties
+application-local.yml
+
+# -------- Logs ----------------------------------------------
+*.log
+logs/
+
+# -------- Misc ----------------------------------------------
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# -------- Archives / raccourcis (ajout) ----------
+*.zip
+*.lnk
+tmp-hash/

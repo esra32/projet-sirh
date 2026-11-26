@@ -1,0 +1,67 @@
+<div class="chatbot-wrapper" [class.open]="isOpen">
+  <!-- Trigger Button -->
+  <button class="chat-trigger" (click)="toggleChat()" [attr.aria-label]="isOpen ? 'Fermer le chat' : 'Ouvrir le chat'">
+    <!-- Chat bubble icon (closed state) -->
+    <svg *ngIf="!isOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+    </svg>
+    <!-- X close icon (open state) -->
+    <svg *ngIf="isOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="20" height="20">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" *ngIf="isOpen">
+    <div class="chat-header">
+      <div class="header-avatar">🤖</div>
+      <div class="header-info">
+        <h3>Assistant SIRH</h3>
+        <p><span class="status-dot"></span> IA Matching & Recrutement</p>
+      </div>
+    </div>
+
+    <div class="chat-messages">
+      <div *ngFor="let msg of history" class="message-bubble" [class.user]="msg.sender === 'USER'">
+        <div class="bubble-content">
+          {{ msg.content }}
+        </div>
+        <span class="bubble-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div class="typing-indicator" *ngIf="isTyping">
+        <span></span><span></span><span></span>
+      </div>
+
+      <div *ngIf="history.length === 0 && !isTyping" class="empty-state">
+        <span class="emoji">💬</span>
+        Bonjour ! Je suis votre assistant RH intelligent.<br/>
+        Posez-moi vos questions sur les offres, les compétences ou le recrutement.
+        <div class="suggestions">
+          <button class="suggestion-chip" (click)="sendSuggestion('Développeur Java')">Développeur Java</button>
+          <button class="suggestion-chip" (click)="sendSuggestion('Offres Data')">Offres Data</button>
+          <button class="suggestion-chip" (click)="sendSuggestion('Mes compétences')">Mes compétences</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <input 
+        type="text" 
+        [(ngModel)]="message" 
+        (keyup.enter)="sendMessage()" 
+        placeholder="Tapez votre question..."
+        class="glass-input"
+        [disabled]="isTyping"
+      >
+      <button (click)="sendMessage()" class="send-btn" [disabled]="!message.trim() || isTyping" aria-label="Envoyer">
+        <!-- Paper plane send icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

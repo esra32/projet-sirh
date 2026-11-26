@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/17c97a15f72347fb9ed180d1eacc1ab2/artifacts
+deleted_time: 1782314457877
+end_time: 1782314184848
+entry_point_name: ''
+experiment_id: '513401499173737316'
+lifecycle_stage: deleted
+run_id: 17c97a15f72347fb9ed180d1eacc1ab2
+run_name: LightGBM_v4_20260624_171618
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1782314178887
+status: 3
+tags: []
+user_id: Hp

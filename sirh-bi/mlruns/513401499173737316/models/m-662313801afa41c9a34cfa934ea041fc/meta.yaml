@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/Hp/Desktop/last v/essra/sirh-bi/mlruns/513401499173737316/models/m-662313801afa41c9a34cfa934ea041fc/artifacts
+creation_timestamp: 1782314171032
+experiment_id: '513401499173737316'
+last_updated_timestamp: 1782314176378
+model_id: m-662313801afa41c9a34cfa934ea041fc
+model_type: null
+name: model_xgboost_v4
+source_run_id: df875434f3fc4dc793dcc64c93e016f8
+status: 2
+status_message: null

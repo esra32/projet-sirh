@@ -1,0 +1,76 @@
+@startuml US08_modification_employe
+scale 2
+title US08 — Modification du Dossier Employé
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 14
+skinparam defaultFontName Arial
+skinparam sequenceArrowThickness 1.5
+skinparam ParticipantPadding 25
+skinparam LifelineStrategy solid
+
+skinparam sequence {
+    ArrowColor              #3F51B5
+    ActorBorderColor        #3F51B5
+    ActorBackgroundColor    #E8EAF6
+    ParticipantBorderColor  #3F51B5
+    ParticipantBackgroundColor #E8EAF6
+    LifeLineBorderColor     #BDBDBD
+    NoteBackgroundColor     #FFFDE7
+    NoteBorderColor         #FBC02D
+    GroupBackgroundColor    #EDE7F6
+    GroupBorderColor        #7E57C2
+    GroupHeaderFontColor    #4527A0
+}
+
+actor       "Administrateur RH"  as RH
+participant "Angular UI"         as Angular
+participant "Gateway (:8080)"    as Gateway
+participant "EmployeeController" as Ctrl
+participant "EmployeeService"    as Svc
+participant "EmployeeRepository" as Repo
+database    "MySQL"              as DB
+
+ref over RH, Angular, Gateway
+    Authentification préalable — JWT obtenu via Auth-Service
+end ref
+
+|||
+
+RH      ->  Angular  : 1. Modifier les informations & valider
+
+Angular ->  Gateway  : 2. PUT /api/employees/{id}
+note right of Angular : Body: EmployeeRequest\nHeader: Authorization: Bearer JWT
+
+Gateway ->  Gateway  : 3. Valider JWT + vérifier rôle
+note right of Gateway
+  Rôle requis : HR_ADMIN ou MANAGER
+  → 403 Forbidden si insuffisant
+end note
+
+Gateway ->  Ctrl     : 4. PUT /api/employees/{id}
+note right of Ctrl
+  @PreAuthorize(
+    "hasAuthority('HR_ADMIN')
+     or hasAuthority('MANAGER')")
+end note
+
+Ctrl    ->  Svc      : 5. update(id, EmployeeRequest)
+Svc     ->  Repo     : 6. findById(id)
+Repo    --> Svc      : 7. Employee entité existante
+
+Svc     ->  Svc      : 8. fromRequest(emp, req)
+note right of Svc : Mise à jour des champs modifiés
+
+Svc     ->  Repo     : 9. save(Employee)
+Repo    ->  DB       : 10. UPDATE employee SET ... WHERE id = ?
+DB      --> Repo     : 11. Confirmation SQL
+Repo    --> Svc      : 12. Employee sauvegardé
+
+Svc     ->  Svc      : 13. toDto(Employee)
+Svc     --> Ctrl     : 14. EmployeeDTO mis à jour
+Ctrl    --> Gateway  : 15. 200 OK
+Gateway --> Angular  : 15. 200 OK
+Angular --> RH       : 16. "Dossier mis à jour avec succès"
+
+@enduml
